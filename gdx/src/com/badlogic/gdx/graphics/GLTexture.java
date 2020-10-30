@@ -27,7 +27,6 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 /** Class representing an OpenGL texture by its target and handle. Keeps track of its state like the TextureFilter and TextureWrap.
  * Also provides some (protected) static methods to create TextureData and upload image data.
@@ -192,12 +191,21 @@ public abstract class GLTexture implements Disposable {
 	 * @return The actual level set, which may be lower than the provided value due to device limitations.
 	 */
 	public float unsafeSetAnisotropicFilter (float level, boolean force) {
+		System.out.println("getMaxAnisotropicFilterLevel");
 		float max = getMaxAnisotropicFilterLevel();
 		if (max == 1f)
 			return 1f;
+
+		System.out.println("Math.min");
 		level = Math.min(level, max);
-		if (!force && MathUtils.isEqual(level, anisotropicFilterLevel, 0.1f))
+
+		System.out.println("MathUtils.isEqual");
+		if (!force && MathUtils.isEqual(level, anisotropicFilterLevel, 0.1f)) {
+			System.out.println("return anisotropicFilterLevel");
 			return anisotropicFilterLevel;
+		}
+
+		System.out.println("Gdx.gl20.glTexParameterf");
 		Gdx.gl20.glTexParameterf(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAX_ANISOTROPY_EXT, level);
 		return anisotropicFilterLevel = level;
 	}

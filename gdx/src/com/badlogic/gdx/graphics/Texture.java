@@ -16,9 +16,6 @@
 
 package com.badlogic.gdx.graphics;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetLoaderParameters.LoadedCallback;
@@ -31,6 +28,9 @@ import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /** A Texture wraps a standard OpenGL ES texture.
  * <p>
@@ -152,6 +152,7 @@ public class Texture extends GLTexture {
 	}
 
 	public void load (TextureData data) {
+		System.out.println("Texture.load");
 		if (this.data != null && data.isManaged() != this.data.isManaged())
 			throw new GdxRuntimeException("New data must have the same managed status as the old data");
 		this.data = data;
@@ -161,9 +162,16 @@ public class Texture extends GLTexture {
 		bind();
 		uploadImageData(GL20.GL_TEXTURE_2D, data);
 
+		System.out.println("unsafeSetFilter");
 		unsafeSetFilter(minFilter, magFilter, true);
+
+		System.out.println("unsafeSetWrap");
 		unsafeSetWrap(uWrap, vWrap, true);
+
+		System.out.println("unsafeSetAnisotropicFilter");
 		unsafeSetAnisotropicFilter(anisotropicFilterLevel, true);
+
+		System.out.println("glBindTexture");
 		Gdx.gl.glBindTexture(glTarget, 0);
 	}
 
