@@ -17,18 +17,13 @@
 package com.badlogic.gdx.graphics.g2d;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Mesh.VertexDataType;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.utils.NumberUtils;
 
 /** Draws batched quads using indices.
  * @see Batch
@@ -187,14 +182,19 @@ public class SpriteBatch implements Batch {
 
 	@Override
 	public void end () {
+		System.out.println("SpriteBatch.end called");
 		if (!drawing) throw new IllegalStateException("SpriteBatch.begin must be called before end.");
+		System.out.println("idx: " + idx);
 		if (idx > 0) flush();
 		lastTexture = null;
 		drawing = false;
 
 		GL20 gl = Gdx.gl;
+		System.out.println("gl.glDepthMask");
 		gl.glDepthMask(true);
+		System.out.println("isBlendingEnabled: " + isBlendingEnabled());
 		if (isBlendingEnabled()) gl.glDisable(GL20.GL_BLEND);
+		System.out.println("Completed end()");
 	}
 
 	@Override
@@ -950,27 +950,37 @@ public class SpriteBatch implements Batch {
 
 	@Override
 	public void flush () {
+		System.out.println("Flush called");
 		if (idx == 0) return;
 
+		System.out.println("renderCalls++");
 		renderCalls++;
 		totalRenderCalls++;
+		System.out.println("spritesInBatch=");
 		int spritesInBatch = idx / 20;
 		if (spritesInBatch > maxSpritesInBatch) maxSpritesInBatch = spritesInBatch;
 		int count = spritesInBatch * 6;
 
+		System.out.println("lastTexture.bind");
 		lastTexture.bind();
 		Mesh mesh = this.mesh;
+		System.out.println("meshs.setVerticles");
 		mesh.setVertices(vertices, 0, idx);
+		System.out.println("mesh.indicesBuffer.position");
 		mesh.getIndicesBuffer().position(0);
+		System.out.println("Mesh.indecesBuffer.limit");
 		mesh.getIndicesBuffer().limit(count);
 
+		System.out.println("BlendingDisabled: " + blendingDisabled);
 		if (blendingDisabled) {
 			Gdx.gl.glDisable(GL20.GL_BLEND);
 		} else {
 			Gdx.gl.glEnable(GL20.GL_BLEND);
+			System.out.println("blendSrcFunc: " + blendSrcFunc);
 			if (blendSrcFunc != -1) Gdx.gl.glBlendFuncSeparate(blendSrcFunc, blendDstFunc, blendSrcFuncAlpha, blendDstFuncAlpha);
 		}
 
+		System.out.println("mesh.render");
 		mesh.render(customShader != null ? customShader : shader, GL20.GL_TRIANGLES, 0, count);
 
 		idx = 0;

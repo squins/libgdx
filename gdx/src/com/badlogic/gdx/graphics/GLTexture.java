@@ -54,7 +54,7 @@ public abstract class GLTexture implements Disposable {
 	/** Generates a new OpenGL texture with the specified target. */
 	public GLTexture (int glTarget) {
 		this(glTarget, Gdx.gl.glGenTexture ());
-		System.out.println("after GLTexture glGentexture");
+		System.out.println("after GLTexture glGentexture, handle:" + glHandle);
 	}
 
 	public GLTexture (int glTarget, int glHandle) {
