@@ -173,6 +173,8 @@ public class Texture extends GLTexture {
 
 		System.out.println("glBindTexture");
 		Gdx.gl.glBindTexture(glTarget, 0);
+		Gdx.app.error("Texture", "after glBindTexture");
+		System.out.println("after glBindTexture");
 	}
 
 	/** Used internally to reload after context loss. Creates a new GL handle then calls {@link #load(TextureData)}. Use this only

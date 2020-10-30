@@ -201,6 +201,7 @@ public class GwtGL20 implements GL20 {
 
 	@Override
 	public void glBindTexture (int target, int texture) {
+		Gdx.app.error("GwtGL20", "glBindTexture: " + texture);
 		gl.bindTexture(target, textures.get(texture));
 	}
 

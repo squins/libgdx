@@ -239,15 +239,19 @@ public abstract class GLTexture implements Disposable {
 	 * @return The maximum supported anisotropic filtering level supported by the device.
 	 */
 	public static float getMaxAnisotropicFilterLevel () {
+		Gdx.app.error("GLTexture", "getMaxAnisotropicFilterLevel");
 		if (maxAnisotropicFilterLevel > 0)
 			return maxAnisotropicFilterLevel;
 		if (Gdx.graphics.supportsExtension("GL_EXT_texture_filter_anisotropic")) {
+			Gdx.app.error("GLTexture", "if GL_EXT_texture_filter_anisotropic");
 			FloatBuffer buffer = BufferUtils.newFloatBuffer(16);
 			buffer.position(0);
 			buffer.limit(buffer.capacity());
 			Gdx.gl20.glGetFloatv(GL20.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, buffer);
+			Gdx.app.error("GLTexture", "after glGetFloatv");
 			return maxAnisotropicFilterLevel = buffer.get(0);
 		}
+		Gdx.app.error("GLTexture", "after getMaxAnisotropicFilterLevel");
 		return maxAnisotropicFilterLevel = 1f;
 	}
 
@@ -301,7 +305,6 @@ public abstract class GLTexture implements Disposable {
 			MipMapGenerator.generateMipMap(target, pixmap, pixmap.getWidth(), pixmap.getHeight());
 		} else {
 			System.out.println("before glTexImage2D");
-			System.out.println("pixmap pixels: " + pixmap.getPixels().get(0));
 			System.out.println("pixmap props: " +
 					"target: " + target +
 					"miplevel : " + miplevel +
