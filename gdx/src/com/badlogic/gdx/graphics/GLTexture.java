@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 /** Class representing an OpenGL texture by its target and handle. Keeps track of its state like the TextureFilter and TextureWrap.
  * Also provides some (protected) static methods to create TextureData and upload image data.
@@ -54,13 +55,14 @@ public abstract class GLTexture implements Disposable {
 	/** Generates a new OpenGL texture with the specified target. */
 	public GLTexture (int glTarget) {
 		this(glTarget, Gdx.gl.glGenTexture ());
+		System.out.println("after GLTexture glGentexture");
 	}
 
 	public GLTexture (int glTarget, int glHandle) {
-		System.out.println("GLTexture constructor called" + getHeight() + getWidth());
-		Gdx.app.error("GLTEXTURE", "GLTexture constructor called");
+		System.out.println("GLTexture constructor called: glTarget " + glTarget + " " + glHandle);
 		this.glTarget = glTarget;
 		this.glHandle = glHandle;
+		System.out.println("after GLTexture constructor called: glTarget " + this.glTarget + " " + this.glHandle);
 	}
 
 	/** @return whether this texture is managed or not. */
@@ -259,8 +261,6 @@ public abstract class GLTexture implements Disposable {
 	}
 	
 	public static void uploadImageData (int target, TextureData data, int miplevel) {
-		Gdx.app.log("GLTEXTURE", "GLTexture uploadImageData called");
-		Gdx.app.error("GLTEXTURE", "GLTexture uploadImageData called");
 		System.out.println("GLTexture uploadImageData called");
 		if (data == null) {
 			// FIXME: remove texture on target?
@@ -287,14 +287,27 @@ public abstract class GLTexture implements Disposable {
 			pixmap = tmp;
 			disposePixmap = true;
 		}
-
+		System.out.println("before glPixelStorei");
 		Gdx.gl.glPixelStorei(GL20.GL_UNPACK_ALIGNMENT, 1);
 		if (data.useMipMaps()) {
 			MipMapGenerator.generateMipMap(target, pixmap, pixmap.getWidth(), pixmap.getHeight());
 		} else {
+			System.out.println("before glTexImage2D");
+			System.out.println("pixmap pixels: " + pixmap.getPixels().get(0));
+			System.out.println("pixmap props: " +
+					"target: " + target +
+					"miplevel : " + miplevel +
+					"glInternalFormat: " + pixmap.getGLInternalFormat() +
+					"width: " + pixmap.getWidth() +
+					"height: " + pixmap.getHeight() +
+					"getGLFormat: " + pixmap.getGLFormat() +
+					"getGLType: " + pixmap.getGLType());
 			Gdx.gl.glTexImage2D(target, miplevel, pixmap.getGLInternalFormat(), pixmap.getWidth(), pixmap.getHeight(), 0,
 				pixmap.getGLFormat(), pixmap.getGLType(), pixmap.getPixels());
 		}
+		System.out.println("after glTexImage2D");
+		System.out.println("disposePixmap: " + disposePixmap);
 		if (disposePixmap) pixmap.dispose();
+		System.out.println("after uploadImageData");
 	}
 }

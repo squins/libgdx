@@ -113,7 +113,6 @@ public class Texture extends GLTexture {
 	public Texture (FileHandle file) {
 		this(file, null, false);
 		System.out.println("First constructor, only file as parameter");
-		Gdx.app.error("Texture","First constructor, only file as parameter");
 	}
 
 	public Texture (FileHandle file, boolean useMipMaps) {
@@ -123,7 +122,6 @@ public class Texture extends GLTexture {
 	public Texture (FileHandle file, Format format, boolean useMipMaps) {
 		this(TextureData.Factory.loadFromFile(file, format, useMipMaps));
 		System.out.println("Texture after loadFromFile");
-		Gdx.app.error("Texture","Texture after loadFromFile");
 	}
 
 	public Texture (Pixmap pixmap) {
@@ -149,7 +147,6 @@ public class Texture extends GLTexture {
 	protected Texture (int glTarget, int glHandle, TextureData data) {
 		super(glTarget, glHandle);
 		System.out.println("Protected Texture called super");
-		Gdx.app.log("Texture", "Protected Texture called super");
 		load(data);
 		if (data.isManaged()) addManagedTexture(Gdx.app, this);
 	}
