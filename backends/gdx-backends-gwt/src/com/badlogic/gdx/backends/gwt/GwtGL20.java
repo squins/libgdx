@@ -25,6 +25,7 @@ import java.nio.ShortBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -880,6 +881,9 @@ public class GwtGL20 implements GL20 {
 	@Override
 	public void glTexImage2D (int target, int level, int internalformat, int width, int height, int border, int format, int type,
 		Buffer pixels) {
+		Gdx.app.log("GWTGL20", "glTexImage2D called");
+		Gdx.app.error("GWTGL20", "glTexImage2D called");
+		System.out.println("glTexImage2D called");
 		if (pixels == null) {
 			gl.texImage2D(target, level, internalformat, width, height, border, format, type, null);
 		} else {
@@ -899,13 +903,19 @@ public class GwtGL20 implements GL20 {
 				Pixmap pixmap = Pixmap.pixmaps.get(((IntBuffer)pixels).get(0));
 				// Prefer to use the HTMLImageElement when possible, since reading from the CanvasElement can be lossy.
 				if (pixmap.canUseImageElement()) {
+					Gdx.app.error("GWTGL20", "useImageElement");
+					System.out.println("useImageElement");
 					gl.texImage2D(target, level, internalformat, format, type, pixmap.getImageElement());
 				}
 				else {
+					Gdx.app.error("GWTGL20", "useCanvasElement");
+					System.out.println("useCanvasElement");
 					gl.texImage2D(target, level, internalformat, format, type, pixmap.getCanvasElement());
 				}
 			}
 		}
+		Gdx.app.error("GWTGL20", "glTexImage2D");
+		System.out.println("after glTexImage2D");
 	}
 
 	@Override

@@ -64,7 +64,9 @@ public class FileHandle {
 	 * Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
 	 * @param fileName the filename. */
 	public FileHandle (String fileName) {
+		System.out.println("FileHandle 1, fileName: " + fileName);
 		this.file = new File(fileName);
+		System.out.println("After new File");
 		this.type = FileType.Absolute;
 	}
 
@@ -72,16 +74,19 @@ public class FileHandle {
 	 * backends. Do not use this constructor in case you write something cross-platform. Use the {@link Files} interface instead.
 	 * @param file the file. */
 	public FileHandle (File file) {
+		System.out.println("FileHandle 2");
 		this.file = file;
 		this.type = FileType.Absolute;
 	}
 
 	protected FileHandle (String fileName, FileType type) {
+		System.out.println("FileHandle 3");
 		this.type = type;
 		file = new File(fileName);
 	}
 
 	protected FileHandle (File file, FileType type) {
+		System.out.println("FileHandle 4");
 		this.file = file;
 		this.type = type;
 	}

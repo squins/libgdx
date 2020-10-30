@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.glutils.ETC1TextureData;
@@ -91,6 +92,9 @@ public interface TextureData {
 		}
 
 		public static TextureData loadFromFile (FileHandle file, Format format, boolean useMipMaps) {
+			System.out.println("loadFromFile called");
+			System.out.println("loadFromFile and file= " + (file == null) + " useMipMaps = " + useMipMaps);
+			Gdx.app.error("TextureData", "loadFromFile and file= " + (file == null) + " useMipMaps = " + useMipMaps);
 			if (file == null) return null;
 			if (file.name().endsWith(".cim")) return new FileTextureData(file, PixmapIO.readCIM(file), format, useMipMaps);
 			if (file.name().endsWith(".etc1")) return new ETC1TextureData(file, useMipMaps);

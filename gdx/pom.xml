@@ -10,12 +10,13 @@
   <artifactId>gdx</artifactId>
   <packaging>jar</packaging>
   <name>libGDX Core</name>
+  <version>1.9.11-1-SNAPSHOT</version>
 
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>gdx-jnigen</artifactId>
-      <version>${project.version}</version>
+      <version>1.9.11</version>
       <optional>true</optional>
     </dependency>
     <dependency>

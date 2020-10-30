@@ -57,6 +57,8 @@ public abstract class GLTexture implements Disposable {
 	}
 
 	public GLTexture (int glTarget, int glHandle) {
+		System.out.println("GLTexture constructor called" + getHeight() + getWidth());
+		Gdx.app.error("GLTEXTURE", "GLTexture constructor called");
 		this.glTarget = glTarget;
 		this.glHandle = glHandle;
 	}
@@ -257,6 +259,9 @@ public abstract class GLTexture implements Disposable {
 	}
 	
 	public static void uploadImageData (int target, TextureData data, int miplevel) {
+		Gdx.app.log("GLTEXTURE", "GLTexture uploadImageData called");
+		Gdx.app.error("GLTEXTURE", "GLTexture uploadImageData called");
+		System.out.println("GLTexture uploadImageData called");
 		if (data == null) {
 			// FIXME: remove texture on target?
 			return;

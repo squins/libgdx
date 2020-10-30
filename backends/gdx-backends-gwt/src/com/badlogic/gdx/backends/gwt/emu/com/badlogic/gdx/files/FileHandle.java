@@ -27,6 +27,7 @@ import java.io.Reader;
 import java.io.Writer;
 
 import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class FileHandle {
@@ -37,9 +38,11 @@ public class FileHandle {
 	}
 
 	public FileHandle (String fileName) {
+		Gdx.app.error("FileHandle", "Empty constructor FileHandle, fileName: " + fileName);
 	}
 
 	public FileHandle (File file) {
+		Gdx.app.error("FileHandle", "Empty constructor FileHandle, file: " + file.getName() + file.getPath());
 	}
 
 	protected FileHandle (String fileName, FileType type) {

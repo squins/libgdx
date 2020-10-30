@@ -95,20 +95,25 @@ public class SpriteBatch implements Batch {
 	 * @param size The max number of sprites in a single batch. Max of 8191.
 	 * @param defaultShader The default shader to use. This is not owned by the SpriteBatch and must be disposed separately. */
 	public SpriteBatch (int size, ShaderProgram defaultShader) {
+		System.out.println("SpriteBatch()");
 		// 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
 		if (size > 8191) throw new IllegalArgumentException("Can't have more than 8191 sprites per batch: " + size);
 
 		VertexDataType vertexDataType = (Gdx.gl30 != null) ? VertexDataType.VertexBufferObjectWithVAO : defaultVertexDataType;
+		System.out.println("VertexDataType");
 
 		mesh = new Mesh(vertexDataType, false, size * 4, size * 6,
 			new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
 			new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
 			new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
 
+		System.out.println("Mesh()");
 		projectionMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+		System.out.println("projectionMatrix");
 		vertices = new float[size * Sprite.SPRITE_SIZE];
 
+
+		System.out.println("setIndices");
 		int len = size * 6;
 		short[] indices = new short[len];
 		short j = 0;
@@ -131,6 +136,7 @@ public class SpriteBatch implements Batch {
 
 	/** Returns a new instance of the default shader used by SpriteBatch for GL2 when no shader is specified. */
 	static public ShaderProgram createDefaultShader () {
+		System.out.println("createDefaultShader");
 		String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
 			+ "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
 			+ "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //

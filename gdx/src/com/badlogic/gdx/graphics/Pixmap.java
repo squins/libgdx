@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.utils.Disposable;
@@ -137,6 +138,8 @@ public class Pixmap implements Disposable {
 	 * 
 	 * @param file the {@link FileHandle} */
 	public Pixmap (FileHandle file) {
+		System.out.println("Pixmap called");
+		Gdx.app.error("Pixmap", "Pixmap called");
 		try {
 			byte[] bytes = file.readBytes();
 			pixmap = new Gdx2DPixmap(bytes, 0, bytes.length, 0);

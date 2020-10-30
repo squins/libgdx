@@ -152,6 +152,7 @@ public class ShaderProgram implements Disposable {
 	 * @param fragmentShader the fragment shader */
 
 	public ShaderProgram (String vertexShader, String fragmentShader) {
+		System.out.println("Constructor");
 		if (vertexShader == null) throw new IllegalArgumentException("vertex shader must not be null");
 		if (fragmentShader == null) throw new IllegalArgumentException("fragment shader must not be null");
 
@@ -164,12 +165,14 @@ public class ShaderProgram implements Disposable {
 		this.fragmentShaderSource = fragmentShader;
 		this.matrix = BufferUtils.newFloatBuffer(16);
 
+		System.out.println("CompileShaders");
 		compileShaders(vertexShader, fragmentShader);
 		if (isCompiled()) {
 			fetchAttributes();
 			fetchUniforms();
 			addManagedShader(Gdx.app, this);
 		}
+		System.out.println("After CompileShaders");
 	}
 
 	public ShaderProgram (FileHandle vertexShader, FileHandle fragmentShader) {
@@ -181,14 +184,15 @@ public class ShaderProgram implements Disposable {
 	 * @param vertexShader
 	 * @param fragmentShader */
 	private void compileShaders (String vertexShader, String fragmentShader) {
+		System.out.println("CompileShaders");
 		vertexShaderHandle = loadShader(GL20.GL_VERTEX_SHADER, vertexShader);
 		fragmentShaderHandle = loadShader(GL20.GL_FRAGMENT_SHADER, fragmentShader);
-
+		System.out.println("after LoadShaders " + vertexShaderHandle + "fragment: " + fragmentShaderHandle);
 		if (vertexShaderHandle == -1 || fragmentShaderHandle == -1) {
 			isCompiled = false;
 			return;
 		}
-
+		System.out.println("linkProgram");
 		program = linkProgram(createProgram());
 		if (program == -1) {
 			isCompiled = false;
@@ -199,16 +203,23 @@ public class ShaderProgram implements Disposable {
 	}
 
 	private int loadShader (int type, String source) {
+		System.out.println("loadShader");
 		GL20 gl = Gdx.gl20;
-		IntBuffer intbuf = BufferUtils.newIntBuffer(1);
-
+//		IntBuffer intbuf = BufferUtils.newIntBuffer(1);
+		IntBuffer intbuf = IntBuffer.allocate(1);
+		System.out.println("after newIntBuffer");
 		int shader = gl.glCreateShader(type);
+		System.out.println("shader: " + shader);
 		if (shader == 0) return -1;
 
+		System.out.println("shaderSource");
 		gl.glShaderSource(shader, source);
+		System.out.println("glCompileShader");
 		gl.glCompileShader(shader);
+		System.out.println("glGetShaderiv java ShaderProgram");
 		gl.glGetShaderiv(shader, GL20.GL_COMPILE_STATUS, intbuf);
 
+		System.out.println("after glGetShaderiv");
 		int compiled = intbuf.get(0);
 		if (compiled == 0) {
 // gl.glGetShaderiv(shader, GL20.GL_INFO_LOG_LENGTH, intbuf);
@@ -217,6 +228,7 @@ public class ShaderProgram implements Disposable {
 			String infoLog = gl.glGetShaderInfoLog(shader);
 			log += type == GL20.GL_VERTEX_SHADER ? "Vertex shader\n" : "Fragment shader:\n";
 			log += infoLog;
+			System.out.println("Log: " + log);
 // }
 			return -1;
 		}
@@ -231,25 +243,30 @@ public class ShaderProgram implements Disposable {
 	}
 
 	private int linkProgram (int program) {
+		System.out.println("linkProgram: " + program);
 		GL20 gl = Gdx.gl20;
 		if (program == -1) return -1;
 
 		gl.glAttachShader(program, vertexShaderHandle);
+		System.out.println("glAttachShader vertexShaderHandle");
 		gl.glAttachShader(program, fragmentShaderHandle);
+		System.out.println("glAttachShader fragmentShaderHandle");
 		gl.glLinkProgram(program);
+		System.out.println("glLinkProgram");
 
-		ByteBuffer tmp = ByteBuffer.allocateDirect(4);
-		tmp.order(ByteOrder.nativeOrder());
-		IntBuffer intbuf = tmp.asIntBuffer();
+		System.out.println("IntBuffer");
+
+		IntBuffer intbuf = BufferUtils.newIntBuffer(1);
 
 		gl.glGetProgramiv(program, GL20.GL_LINK_STATUS, intbuf);
 		int linked = intbuf.get(0);
+		System.out.println("Linked: " + linked);
 		if (linked == 0) {
-// Gdx.gl20.glGetProgramiv(program, GL20.GL_INFO_LOG_LENGTH, intbuf);
-// int infoLogLength = intbuf.get(0);
-// if (infoLogLength > 1) {
-			log = Gdx.gl20.glGetProgramInfoLog(program);
-// }
+//			gl.glGetProgramiv(program, GL20.GL_INFO_LOG_LENGTH, intbuf);
+//			 int infoLogLength = intbuf.get(0);
+//			 if (infoLogLength > 1) {
+			 	log = Gdx.gl20.glGetProgramInfoLog(program);
+//		 	}
 			return -1;
 		}
 
@@ -808,9 +825,12 @@ public class ShaderProgram implements Disposable {
 	IntBuffer type = BufferUtils.newIntBuffer(1);
 
 	private void fetchUniforms () {
+		System.out.println("fetchUniforms()");
 		params.clear();
+		System.out.println("after params.clear()");
 		Gdx.gl20.glGetProgramiv(program, GL20.GL_ACTIVE_UNIFORMS, params);
 		int numUniforms = params.get(0);
+		System.out.println("numUniforms: " + numUniforms);
 
 		uniformNames = new String[numUniforms];
 
@@ -825,15 +845,23 @@ public class ShaderProgram implements Disposable {
 			uniformSizes.put(name, params.get(0));
 			uniformNames[i] = name;
 		}
+		System.out.println("fetchUniforms() after for loop");
 	}
 
 	private void fetchAttributes () {
+		System.out.println("fetchAttributes() before params.clear()");
 		params.clear();
+		System.out.println("after params.clear()");
 		Gdx.gl20.glGetProgramiv(program, GL20.GL_ACTIVE_ATTRIBUTES, params);
+
+		System.out.println("after glGetProgramiv");
 		int numAttributes = params.get(0);
 
+		System.out.println("numAttributes: " + numAttributes);
+		System.out.println("attributeNames = new String");
 		attributeNames = new String[numAttributes];
 
+		System.out.println("before for loop");
 		for (int i = 0; i < numAttributes; i++) {
 			params.clear();
 			params.put(0, 1);
@@ -845,6 +873,7 @@ public class ShaderProgram implements Disposable {
 			attributeSizes.put(name, params.get(0));
 			attributeNames[i] = name;
 		}
+		System.out.println("after for loop");
 	}
 
 	/** @param name the name of the attribute

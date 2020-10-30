@@ -30,6 +30,7 @@ import com.badlogic.gdx.backends.gwt.GwtFileHandle;
 public abstract class FileHandleStream extends GwtFileHandle {
 	public FileHandleStream (String path) {
 		super(((GwtApplication)Gdx.app).getPreloader(), path, FileType.Internal);
+		Gdx.app.error("FileHandleStream", "After super");
 	}
 
 	public boolean isDirectory () {

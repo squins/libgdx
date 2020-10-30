@@ -21,6 +21,7 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtFileHandle;
 import com.badlogic.gdx.files.FileHandle;
@@ -98,9 +99,12 @@ public class Pixmap implements Disposable {
 	Filter filter = Filter.BiLinear;
 	CanvasPixelArray pixels;
 	private ImageElement imageElement;
+	private ImageElement image2;
 
 	public Pixmap (FileHandle file) {
 		this(((GwtFileHandle)file).preloader.images.get(file.path()));
+		this.image2 = ((GwtFileHandle)file).preloader.images.get(file.path());
+		Gdx.app.error("Pixmap", "width: " + image2.getWidth() + " height: " + getHeight());
 		if (imageElement == null) throw new GdxRuntimeException("Couldn't load image '" + file.path() + "', file does not exist");
 	}
 	
@@ -122,6 +126,7 @@ public class Pixmap implements Disposable {
 	}
 	
 	private Pixmap(int width, int height, ImageElement imageElement) {
+		Gdx.app.error("Pixmap", "Constructor");
 		this.imageElement = imageElement;
 		this.width = imageElement != null ? imageElement.getWidth() : width;
 		this.height = imageElement != null ? imageElement.getHeight() : height;

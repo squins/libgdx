@@ -36,8 +36,11 @@ public class FileTextureData implements TextureData {
 	boolean isPrepared = false;
 
 	public FileTextureData (FileHandle file, Pixmap preloadedPixmap, Format format, boolean useMipMaps) {
+		System.out.println("FileTextureData");
 		this.file = file;
+		System.out.println("before pixmap assign");
 		this.pixmap = preloadedPixmap;
+		System.out.println("after pixmap assign");
 		this.format = format;
 		this.useMipMaps = useMipMaps;
 		if (pixmap != null) {

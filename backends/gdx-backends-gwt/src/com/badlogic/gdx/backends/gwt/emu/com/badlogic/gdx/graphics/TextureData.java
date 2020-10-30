@@ -1,5 +1,6 @@
 package com.badlogic.gdx.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
@@ -69,10 +70,12 @@ public interface TextureData {
 	public static class Factory {
 
 		public static TextureData loadFromFile (FileHandle file, boolean useMipMaps) {
+			Gdx.app.error("TextureData", "loadFromFile and file= " + (file == null) + " useMipMaps = " + useMipMaps);
 			return loadFromFile(file, null, useMipMaps);
 		}
 
 		public static TextureData loadFromFile (FileHandle file, Format format, boolean useMipMaps) {
+			Gdx.app.error("TextureData", "loadFromFile and file= " + (file == null) + " useMipMaps = " + useMipMaps);
 			if (file == null) return null;
 			return new FileTextureData(file, new Pixmap(file), format, useMipMaps);
 		}
