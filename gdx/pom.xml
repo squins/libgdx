@@ -16,7 +16,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>gdx-jnigen</artifactId>
-      <version>1.9.11</version>
+      <version>1.9.11-1-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
     <dependency>
