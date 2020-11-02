@@ -101,17 +101,20 @@ public class VertexArray implements VertexData {
 
 	@Override
 	public void bind (final ShaderProgram shader, final int[] locations) {
+		System.out.println("Bind shaderProgram and locations in VertexArray.bind");
 		final int numAttributes = attributes.size();
 		byteBuffer.limit(buffer.limit() * 4);
+		System.out.println("locations null? " + (locations == null));
 		if (locations == null) {
 			for (int i = 0; i < numAttributes; i++) {
 				final VertexAttribute attribute = attributes.get(i);
 				final int location = shader.getAttributeLocation(attribute.alias);
 				if (location < 0) continue;
 				shader.enableVertexAttribute(location);
-
+				System.out.println("enableVertexAttribute");
 				if (attribute.type == GL20.GL_FLOAT) {
 					buffer.position(attribute.offset / 4);
+					System.out.println("before setVertexAttribute if type is GL_FLOAT");
 					shader.setVertexAttribute(location, attribute.numComponents, attribute.type, attribute.normalized,
 						attributes.vertexSize, buffer);
 				} else {

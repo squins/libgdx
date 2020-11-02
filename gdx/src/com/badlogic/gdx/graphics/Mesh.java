@@ -508,9 +508,13 @@ public class Mesh implements Disposable {
 	 * @param shader the shader (does not bind the shader)
 	 * @param locations array containing the attribute locations. */
 	public void bind (final ShaderProgram shader, final int[] locations) {
+		System.out.println("bind with shader and intArray locations");
 		vertices.bind(shader, locations);
+		System.out.println("vertices.bind(shader, locations);");
 		if (instances != null && instances.getNumInstances() > 0) instances.bind(shader, locations);
+		System.out.println("after instances != null");
 		if (indices.getNumIndices() > 0) indices.bind();
+		System.out.println("after bind with shader and intArray locations");
 	}
 
 	/** Unbinds the underlying {@link VertexBufferObject} and {@link IndexBufferObject} is indices were given. Use this with OpenGL
@@ -607,10 +611,11 @@ public class Mesh implements Disposable {
 	 * @param count number of vertices or indices to use
 	 * @param autoBind overrides the autoBind member of this Mesh */
 	public void render (ShaderProgram shader, int primitiveType, int offset, int count, boolean autoBind) {
+		System.out.println("render called, auto bind is " + autoBind);
 		if (count == 0) return;
 
 		if (autoBind) bind(shader);
-
+		System.out.println("before isVertexArray");
 		if (isVertexArray) {
 			if (indices.getNumIndices() > 0) {
 				ShortBuffer buffer = indices.getBuffer();
@@ -619,11 +624,14 @@ public class Mesh implements Disposable {
 				buffer.position(offset);
 				buffer.limit(offset + count);
 				Gdx.gl20.glDrawElements(primitiveType, count, GL20.GL_UNSIGNED_SHORT, buffer);
+				System.out.println("after first glDrawElements");
 				buffer.position(oldPosition);
 				buffer.limit(oldLimit);
 			} else {
 				Gdx.gl20.glDrawArrays(primitiveType, offset, count);
+				System.out.println("after glDrawArrays");
 			}
+			System.out.println("between isVertexArray");
 		} else {
 			int numInstances = 0;
 			if (isInstanced) numInstances = instances.getNumInstances();
@@ -647,8 +655,10 @@ public class Mesh implements Disposable {
 				}
 			}
 		}
+		System.out.println("after isVertexArray");
 
 		if (autoBind) unbind(shader);
+		System.out.println("after render mesh");
 	}
 
 	/** Frees all resources associated with this Mesh */

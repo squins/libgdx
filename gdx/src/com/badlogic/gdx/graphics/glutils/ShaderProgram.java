@@ -670,6 +670,7 @@ public class ShaderProgram implements Disposable {
 	}
 
 	public void setVertexAttribute (int location, int size, int type, boolean normalize, int stride, Buffer buffer) {
+		System.out.println("setVertexAttribute in ShaderProgram");
 		GL20 gl = Gdx.gl20;
 		checkManaged();
 		gl.glVertexAttribPointer(location, size, type, normalize, stride, buffer);

@@ -982,7 +982,7 @@ public class SpriteBatch implements Batch {
 
 		System.out.println("mesh.render");
 		mesh.render(customShader != null ? customShader : shader, GL20.GL_TRIANGLES, 0, count);
-
+		System.out.println("after mesh.render");
 		idx = 0;
 	}
 
