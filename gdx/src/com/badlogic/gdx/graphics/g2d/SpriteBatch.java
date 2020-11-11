@@ -90,25 +90,25 @@ public class SpriteBatch implements Batch {
 	 * @param size The max number of sprites in a single batch. Max of 8191.
 	 * @param defaultShader The default shader to use. This is not owned by the SpriteBatch and must be disposed separately. */
 	public SpriteBatch (int size, ShaderProgram defaultShader) {
-		System.out.println("SpriteBatch()");
+		// DISABLED: performance System.out.println("SpriteBatch()");
 		// 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
 		if (size > 8191) throw new IllegalArgumentException("Can't have more than 8191 sprites per batch: " + size);
 
 		VertexDataType vertexDataType = (Gdx.gl30 != null) ? VertexDataType.VertexBufferObjectWithVAO : defaultVertexDataType;
-		System.out.println("VertexDataType");
+		// DISABLED: performance System.out.println("VertexDataType");
 
 		mesh = new Mesh(vertexDataType, false, size * 4, size * 6,
 			new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
 			new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
 			new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
 
-		System.out.println("Mesh()");
+		// DISABLED: performance System.out.println("Mesh()");
 		projectionMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		System.out.println("projectionMatrix");
+		// DISABLED: performance System.out.println("projectionMatrix");
 		vertices = new float[size * Sprite.SPRITE_SIZE];
 
 
-		System.out.println("setIndices");
+		// DISABLED: performance System.out.println("setIndices");
 		int len = size * 6;
 		short[] indices = new short[len];
 		short j = 0;
@@ -131,7 +131,7 @@ public class SpriteBatch implements Batch {
 
 	/** Returns a new instance of the default shader used by SpriteBatch for GL2 when no shader is specified. */
 	static public ShaderProgram createDefaultShader () {
-		System.out.println("createDefaultShader");
+		// DISABLED: performance System.out.println("createDefaultShader");
 		String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
 			+ "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
 			+ "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
@@ -182,19 +182,19 @@ public class SpriteBatch implements Batch {
 
 	@Override
 	public void end () {
-		System.out.println("SpriteBatch.end called");
+		// DISABLED: performance System.out.println("SpriteBatch.end called");
 		if (!drawing) throw new IllegalStateException("SpriteBatch.begin must be called before end.");
-		System.out.println("idx: " + idx);
+		// DISABLED: performance System.out.println("idx: " + idx);
 		if (idx > 0) flush();
 		lastTexture = null;
 		drawing = false;
 
 		GL20 gl = Gdx.gl;
-		System.out.println("gl.glDepthMask");
+		// DISABLED: performance System.out.println("gl.glDepthMask");
 		gl.glDepthMask(true);
-		System.out.println("isBlendingEnabled: " + isBlendingEnabled());
+		// DISABLED: performance System.out.println("isBlendingEnabled: " + isBlendingEnabled());
 		if (isBlendingEnabled()) gl.glDisable(GL20.GL_BLEND);
-		System.out.println("Completed end()");
+		// DISABLED: performance System.out.println("Completed end()");
 	}
 
 	@Override
@@ -950,39 +950,39 @@ public class SpriteBatch implements Batch {
 
 	@Override
 	public void flush () {
-		System.out.println("Flush called");
+		// DISABLED: performance System.out.println("Flush called");
 		if (idx == 0) return;
 
-		System.out.println("renderCalls++");
+		// DISABLED: performance System.out.println("renderCalls++");
 		renderCalls++;
 		totalRenderCalls++;
-		System.out.println("spritesInBatch=");
+		// DISABLED: performance System.out.println("spritesInBatch=");
 		int spritesInBatch = idx / 20;
 		if (spritesInBatch > maxSpritesInBatch) maxSpritesInBatch = spritesInBatch;
 		int count = spritesInBatch * 6;
 
-		System.out.println("lastTexture.bind");
+		// DISABLED: performance System.out.println("lastTexture.bind");
 		lastTexture.bind();
 		Mesh mesh = this.mesh;
-		System.out.println("meshs.setVerticles");
+		// DISABLED: performance System.out.println("meshs.setVerticles");
 		mesh.setVertices(vertices, 0, idx);
-		System.out.println("mesh.indicesBuffer.position");
+		// DISABLED: performance System.out.println("mesh.indicesBuffer.position");
 		mesh.getIndicesBuffer().position(0);
-		System.out.println("Mesh.indecesBuffer.limit");
+		// DISABLED: performance System.out.println("Mesh.indecesBuffer.limit");
 		mesh.getIndicesBuffer().limit(count);
 
-		System.out.println("BlendingDisabled: " + blendingDisabled);
+		// DISABLED: performance System.out.println("BlendingDisabled: " + blendingDisabled);
 		if (blendingDisabled) {
 			Gdx.gl.glDisable(GL20.GL_BLEND);
 		} else {
 			Gdx.gl.glEnable(GL20.GL_BLEND);
-			System.out.println("blendSrcFunc: " + blendSrcFunc);
+			// DISABLED: performance System.out.println("blendSrcFunc: " + blendSrcFunc);
 			if (blendSrcFunc != -1) Gdx.gl.glBlendFuncSeparate(blendSrcFunc, blendDstFunc, blendSrcFuncAlpha, blendDstFuncAlpha);
 		}
 
-		System.out.println("mesh.render");
+		// DISABLED: performance System.out.println("mesh.render");
 		mesh.render(customShader != null ? customShader : shader, GL20.GL_TRIANGLES, 0, count);
-		System.out.println("after mesh.render");
+		// DISABLED: performance System.out.println("after mesh.render");
 		idx = 0;
 	}
 

@@ -54,14 +54,14 @@ public abstract class GLTexture implements Disposable {
 	/** Generates a new OpenGL texture with the specified target. */
 	public GLTexture (int glTarget) {
 		this(glTarget, Gdx.gl.glGenTexture ());
-		System.out.println("after GLTexture glGentexture, handle:" + glHandle);
+		// DISABLED: performance System.out.println("after GLTexture glGentexture, handle:" + glHandle);
 	}
 
 	public GLTexture (int glTarget, int glHandle) {
-		System.out.println("GLTexture constructor called: glTarget " + glTarget + " " + glHandle);
+		// DISABLED: performance System.out.println("GLTexture constructor called: glTarget " + glTarget + " " + glHandle);
 		this.glTarget = glTarget;
 		this.glHandle = glHandle;
-		System.out.println("after GLTexture constructor called: glTarget " + this.glTarget + " " + this.glHandle);
+		// DISABLED: performance System.out.println("after GLTexture constructor called: glTarget " + this.glTarget + " " + this.glHandle);
 	}
 
 	/** @return whether this texture is managed or not. */
@@ -191,21 +191,21 @@ public abstract class GLTexture implements Disposable {
 	 * @return The actual level set, which may be lower than the provided value due to device limitations.
 	 */
 	public float unsafeSetAnisotropicFilter (float level, boolean force) {
-		System.out.println("getMaxAnisotropicFilterLevel");
+		// DISABLED: performance System.out.println("getMaxAnisotropicFilterLevel");
 		float max = getMaxAnisotropicFilterLevel();
 		if (max == 1f)
 			return 1f;
 
-		System.out.println("Math.min");
+		// DISABLED: performance System.out.println("Math.min");
 		level = Math.min(level, max);
 
-		System.out.println("MathUtils.isEqual");
+		// DISABLED: performance System.out.println("MathUtils.isEqual");
 		if (!force && MathUtils.isEqual(level, anisotropicFilterLevel, 0.1f)) {
-			System.out.println("return anisotropicFilterLevel");
+			// DISABLED: performance System.out.println("return anisotropicFilterLevel");
 			return anisotropicFilterLevel;
 		}
 
-		System.out.println("Gdx.gl20.glTexParameterf");
+		// DISABLED: performance System.out.println("Gdx.gl20.glTexParameterf");
 		Gdx.gl20.glTexParameterf(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAX_ANISOTROPY_EXT, level);
 		return anisotropicFilterLevel = level;
 	}
@@ -273,7 +273,7 @@ public abstract class GLTexture implements Disposable {
 	}
 	
 	public static void uploadImageData (int target, TextureData data, int miplevel) {
-		System.out.println("GLTexture uploadImageData called");
+		// DISABLED: performance System.out.println("GLTexture uploadImageData called");
 		if (data == null) {
 			// FIXME: remove texture on target?
 			return;
@@ -299,26 +299,26 @@ public abstract class GLTexture implements Disposable {
 			pixmap = tmp;
 			disposePixmap = true;
 		}
-		System.out.println("before glPixelStorei");
+		// DISABLED: performance System.out.println("before glPixelStorei");
 		Gdx.gl.glPixelStorei(GL20.GL_UNPACK_ALIGNMENT, 1);
 		if (data.useMipMaps()) {
 			MipMapGenerator.generateMipMap(target, pixmap, pixmap.getWidth(), pixmap.getHeight());
 		} else {
-			System.out.println("before glTexImage2D");
-			System.out.println("pixmap props: " +
-					"target: " + target +
-					"miplevel : " + miplevel +
-					"glInternalFormat: " + pixmap.getGLInternalFormat() +
-					"width: " + pixmap.getWidth() +
-					"height: " + pixmap.getHeight() +
-					"getGLFormat: " + pixmap.getGLFormat() +
-					"getGLType: " + pixmap.getGLType());
+			// DISABLED: performance System.out.println("before glTexImage2D");
+			// DISABLED: performance System.out.println("pixmap props: " +
+//					"target: " + target +
+//					"miplevel : " + miplevel +
+//					"glInternalFormat: " + pixmap.getGLInternalFormat() +
+//					"width: " + pixmap.getWidth() +
+//					"height: " + pixmap.getHeight() +
+//					"getGLFormat: " + pixmap.getGLFormat() +
+//					"getGLType: " + pixmap.getGLType());
 			Gdx.gl.glTexImage2D(target, miplevel, pixmap.getGLInternalFormat(), pixmap.getWidth(), pixmap.getHeight(), 0,
 				pixmap.getGLFormat(), pixmap.getGLType(), pixmap.getPixels());
 		}
-		System.out.println("after glTexImage2D");
-		System.out.println("disposePixmap: " + disposePixmap);
+		// DISABLED: performance System.out.println("after glTexImage2D");
+		// DISABLED: performance System.out.println("disposePixmap: " + disposePixmap);
 		if (disposePixmap) pixmap.dispose();
-		System.out.println("after uploadImageData");
+		// DISABLED: performance System.out.println("after uploadImageData");
 	}
 }

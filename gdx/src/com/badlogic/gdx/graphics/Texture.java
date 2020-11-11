@@ -112,7 +112,7 @@ public class Texture extends GLTexture {
 
 	public Texture (FileHandle file) {
 		this(file, null, false);
-		System.out.println("First constructor, only file as parameter");
+		// DISABLED: performance System.out.println("First constructor, only file as parameter");
 	}
 
 	public Texture (FileHandle file, boolean useMipMaps) {
@@ -121,7 +121,7 @@ public class Texture extends GLTexture {
 
 	public Texture (FileHandle file, Format format, boolean useMipMaps) {
 		this(TextureData.Factory.loadFromFile(file, format, useMipMaps));
-		System.out.println("Texture after loadFromFile");
+		// DISABLED: performance System.out.println("Texture after loadFromFile");
 	}
 
 	public Texture (Pixmap pixmap) {
@@ -146,13 +146,13 @@ public class Texture extends GLTexture {
 
 	protected Texture (int glTarget, int glHandle, TextureData data) {
 		super(glTarget, glHandle);
-		System.out.println("Protected Texture called super");
+		// DISABLED: performance System.out.println("Protected Texture called super");
 		load(data);
 		if (data.isManaged()) addManagedTexture(Gdx.app, this);
 	}
 
 	public void load (TextureData data) {
-		System.out.println("Texture.load");
+		// DISABLED: performance System.out.println("Texture.load");
 		if (this.data != null && data.isManaged() != this.data.isManaged())
 			throw new GdxRuntimeException("New data must have the same managed status as the old data");
 		this.data = data;
@@ -162,19 +162,19 @@ public class Texture extends GLTexture {
 		bind();
 		uploadImageData(GL20.GL_TEXTURE_2D, data);
 
-		System.out.println("unsafeSetFilter");
+		// DISABLED: performance System.out.println("unsafeSetFilter");
 		unsafeSetFilter(minFilter, magFilter, true);
 
-		System.out.println("unsafeSetWrap");
+		// DISABLED: performance System.out.println("unsafeSetWrap");
 		unsafeSetWrap(uWrap, vWrap, true);
 
-		System.out.println("unsafeSetAnisotropicFilter");
+		// DISABLED: performance System.out.println("unsafeSetAnisotropicFilter");
 		unsafeSetAnisotropicFilter(anisotropicFilterLevel, true);
 
-		System.out.println("glBindTexture");
+		// DISABLED: performance System.out.println("glBindTexture");
 		Gdx.gl.glBindTexture(glTarget, 0);
 		Gdx.app.error("Texture", "after glBindTexture");
-		System.out.println("after glBindTexture");
+		// DISABLED: performance System.out.println("after glBindTexture");
 	}
 
 	/** Used internally to reload after context loss. Creates a new GL handle then calls {@link #load(TextureData)}. Use this only

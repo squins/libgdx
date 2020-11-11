@@ -152,7 +152,7 @@ public class ShaderProgram implements Disposable {
 	 * @param fragmentShader the fragment shader */
 
 	public ShaderProgram (String vertexShader, String fragmentShader) {
-		System.out.println("Constructor");
+		// DISABLED: performance System.out.println("Constructor");
 		if (vertexShader == null) throw new IllegalArgumentException("vertex shader must not be null");
 		if (fragmentShader == null) throw new IllegalArgumentException("fragment shader must not be null");
 
@@ -165,14 +165,14 @@ public class ShaderProgram implements Disposable {
 		this.fragmentShaderSource = fragmentShader;
 		this.matrix = BufferUtils.newFloatBuffer(16);
 
-		System.out.println("CompileShaders");
+		// DISABLED: performance System.out.println("CompileShaders");
 		compileShaders(vertexShader, fragmentShader);
 		if (isCompiled()) {
 			fetchAttributes();
 			fetchUniforms();
 			addManagedShader(Gdx.app, this);
 		}
-		System.out.println("After CompileShaders");
+		// DISABLED: performance System.out.println("After CompileShaders");
 	}
 
 	public ShaderProgram (FileHandle vertexShader, FileHandle fragmentShader) {
@@ -184,15 +184,15 @@ public class ShaderProgram implements Disposable {
 	 * @param vertexShader
 	 * @param fragmentShader */
 	private void compileShaders (String vertexShader, String fragmentShader) {
-		System.out.println("CompileShaders");
+		// DISABLED: performance System.out.println("CompileShaders");
 		vertexShaderHandle = loadShader(GL20.GL_VERTEX_SHADER, vertexShader);
 		fragmentShaderHandle = loadShader(GL20.GL_FRAGMENT_SHADER, fragmentShader);
-		System.out.println("after LoadShaders " + vertexShaderHandle + "fragment: " + fragmentShaderHandle);
+		// DISABLED: performance System.out.println("after LoadShaders " + vertexShaderHandle + "fragment: " + fragmentShaderHandle);
 		if (vertexShaderHandle == -1 || fragmentShaderHandle == -1) {
 			isCompiled = false;
 			return;
 		}
-		System.out.println("linkProgram");
+		// DISABLED: performance System.out.println("linkProgram");
 		program = linkProgram(createProgram());
 		if (program == -1) {
 			isCompiled = false;
@@ -203,23 +203,23 @@ public class ShaderProgram implements Disposable {
 	}
 
 	private int loadShader (int type, String source) {
-		System.out.println("loadShader");
+		// DISABLED: performance System.out.println("loadShader");
 		GL20 gl = Gdx.gl20;
 //		IntBuffer intbuf = BufferUtils.newIntBuffer(1);
 		IntBuffer intbuf = IntBuffer.allocate(1);
-		System.out.println("after newIntBuffer");
+		// DISABLED: performance System.out.println("after newIntBuffer");
 		int shader = gl.glCreateShader(type);
-		System.out.println("shader: " + shader);
+		// DISABLED: performance System.out.println("shader: " + shader);
 		if (shader == 0) return -1;
 
-		System.out.println("shaderSource");
+		// DISABLED: performance System.out.println("shaderSource");
 		gl.glShaderSource(shader, source);
-		System.out.println("glCompileShader");
+		// DISABLED: performance System.out.println("glCompileShader");
 		gl.glCompileShader(shader);
-		System.out.println("glGetShaderiv java ShaderProgram");
+		// DISABLED: performance System.out.println("glGetShaderiv java ShaderProgram");
 		gl.glGetShaderiv(shader, GL20.GL_COMPILE_STATUS, intbuf);
 
-		System.out.println("after glGetShaderiv");
+		// DISABLED: performance System.out.println("after glGetShaderiv");
 		int compiled = intbuf.get(0);
 		if (compiled == 0) {
 // gl.glGetShaderiv(shader, GL20.GL_INFO_LOG_LENGTH, intbuf);
@@ -228,7 +228,7 @@ public class ShaderProgram implements Disposable {
 			String infoLog = gl.glGetShaderInfoLog(shader);
 			log += type == GL20.GL_VERTEX_SHADER ? "Vertex shader\n" : "Fragment shader:\n";
 			log += infoLog;
-			System.out.println("Log: " + log);
+			// DISABLED: performance System.out.println("Log: " + log);
 // }
 			return -1;
 		}
@@ -243,24 +243,24 @@ public class ShaderProgram implements Disposable {
 	}
 
 	private int linkProgram (int program) {
-		System.out.println("linkProgram: " + program);
+		// DISABLED: performance System.out.println("linkProgram: " + program);
 		GL20 gl = Gdx.gl20;
 		if (program == -1) return -1;
 
 		gl.glAttachShader(program, vertexShaderHandle);
-		System.out.println("glAttachShader vertexShaderHandle");
+		// DISABLED: performance System.out.println("glAttachShader vertexShaderHandle");
 		gl.glAttachShader(program, fragmentShaderHandle);
-		System.out.println("glAttachShader fragmentShaderHandle");
+		// DISABLED: performance System.out.println("glAttachShader fragmentShaderHandle");
 		gl.glLinkProgram(program);
-		System.out.println("glLinkProgram");
+		// DISABLED: performance System.out.println("glLinkProgram");
 
-		System.out.println("IntBuffer");
+		// DISABLED: performance System.out.println("IntBuffer");
 
 		IntBuffer intbuf = BufferUtils.newIntBuffer(1);
 
 		gl.glGetProgramiv(program, GL20.GL_LINK_STATUS, intbuf);
 		int linked = intbuf.get(0);
-		System.out.println("Linked: " + linked);
+		// DISABLED: performance System.out.println("Linked: " + linked);
 		if (linked == 0) {
 //			gl.glGetProgramiv(program, GL20.GL_INFO_LOG_LENGTH, intbuf);
 //			 int infoLogLength = intbuf.get(0);
@@ -670,7 +670,7 @@ public class ShaderProgram implements Disposable {
 	}
 
 	public void setVertexAttribute (int location, int size, int type, boolean normalize, int stride, Buffer buffer) {
-		System.out.println("setVertexAttribute in ShaderProgram");
+		// DISABLED: performance System.out.println("setVertexAttribute in ShaderProgram");
 		GL20 gl = Gdx.gl20;
 		checkManaged();
 		gl.glVertexAttribPointer(location, size, type, normalize, stride, buffer);
@@ -826,12 +826,12 @@ public class ShaderProgram implements Disposable {
 	IntBuffer type = BufferUtils.newIntBuffer(1);
 
 	private void fetchUniforms () {
-		System.out.println("fetchUniforms()");
+		// DISABLED: performance System.out.println("fetchUniforms()");
 		params.clear();
-		System.out.println("after params.clear()");
+		// DISABLED: performance System.out.println("after params.clear()");
 		Gdx.gl20.glGetProgramiv(program, GL20.GL_ACTIVE_UNIFORMS, params);
 		int numUniforms = params.get(0);
-		System.out.println("numUniforms: " + numUniforms);
+		// DISABLED: performance System.out.println("numUniforms: " + numUniforms);
 
 		uniformNames = new String[numUniforms];
 
@@ -846,23 +846,23 @@ public class ShaderProgram implements Disposable {
 			uniformSizes.put(name, params.get(0));
 			uniformNames[i] = name;
 		}
-		System.out.println("fetchUniforms() after for loop");
+		// DISABLED: performance System.out.println("fetchUniforms() after for loop");
 	}
 
 	private void fetchAttributes () {
-		System.out.println("fetchAttributes() before params.clear()");
+		// DISABLED: performance System.out.println("fetchAttributes() before params.clear()");
 		params.clear();
-		System.out.println("after params.clear()");
+		// DISABLED: performance System.out.println("after params.clear()");
 		Gdx.gl20.glGetProgramiv(program, GL20.GL_ACTIVE_ATTRIBUTES, params);
 
-		System.out.println("after glGetProgramiv");
+		// DISABLED: performance System.out.println("after glGetProgramiv");
 		int numAttributes = params.get(0);
 
-		System.out.println("numAttributes: " + numAttributes);
-		System.out.println("attributeNames = new String");
+		// DISABLED: performance System.out.println("numAttributes: " + numAttributes);
+		// DISABLED: performance System.out.println("attributeNames = new String");
 		attributeNames = new String[numAttributes];
 
-		System.out.println("before for loop");
+		// DISABLED: performance System.out.println("before for loop");
 		for (int i = 0; i < numAttributes; i++) {
 			params.clear();
 			params.put(0, 1);
@@ -874,7 +874,7 @@ public class ShaderProgram implements Disposable {
 			attributeSizes.put(name, params.get(0));
 			attributeNames[i] = name;
 		}
-		System.out.println("after for loop");
+		// DISABLED: performance System.out.println("after for loop");
 	}
 
 	/** @param name the name of the attribute
