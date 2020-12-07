@@ -22,8 +22,10 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.gwt.GwtFileHandle;
 import com.badlogic.gdx.backends.gwt.preloader.AssetDownloader.AssetLoaderListener;
 import com.badlogic.gdx.backends.gwt.preloader.AssetFilter.AssetType;
@@ -198,20 +200,21 @@ public class Preloader {
 	}
 	
 	public InputStream read (String url) {
+		Gdx.app.error("Preloader","read file: " + url);
 		if (texts.containsKey(url)) {
-			try {
-				return new ByteArrayInputStream(texts.get(url).getBytes("UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				return null;
-			}
+			Gdx.app.error("Preloader","text file: " + url);
+			return new ByteArrayInputStream(texts.get(url).getBytes(StandardCharsets.UTF_8));
 		}
 		if (images.containsKey(url)) {
+			Gdx.app.error("Preloader","image file: " + url);
 			return new ByteArrayInputStream(new byte[1]); // FIXME, sensible?
 		}
 		if (binaries.containsKey(url)) {
+			Gdx.app.error("Preloader","binaries file: " + url);
 			return binaries.get(url).read();
 		}
 		if (audio.containsKey(url)) {
+			Gdx.app.error("Preloader","audio file: " + url);
 			return audio.get(url).read();
 		}
 		return null;

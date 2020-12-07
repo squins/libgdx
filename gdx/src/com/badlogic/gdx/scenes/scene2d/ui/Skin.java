@@ -75,8 +75,10 @@ public class Skin implements Disposable {
 	 * automatically disposed when the skin is disposed. */
 	public Skin (FileHandle skinFile) {
 		System.out.println("Skin constructor");
+		Gdx.app.error("Skin","Skin constructor");
 		FileHandle atlasFile = skinFile.sibling(skinFile.nameWithoutExtension() + ".atlas");
 		if (atlasFile.exists()) {
+			Gdx.app.error("Skin","atlas exists");
 			System.out.println("atlas exists");
 			atlas = new TextureAtlas(atlasFile);
 			addRegions(atlas);
@@ -102,7 +104,8 @@ public class Skin implements Disposable {
 
 	/** Adds all resources in the specified skin JSON file. */
 	public void load (FileHandle skinFile) {
-		System.out.println("Load SkinFile Json");
+		System.out.println("Load skinFile JSON");
+		Gdx.app.error("Skin", "Load SkinFile Json");
 		try {
 			getJsonLoader(skinFile).fromJson(Skin.class, skinFile);
 		} catch (SerializationException ex) {
@@ -112,7 +115,8 @@ public class Skin implements Disposable {
 
 	/** Adds all named texture regions from the atlas. The atlas will not be automatically disposed when the skin is disposed. */
 	public void addRegions (TextureAtlas atlas) {
-		System.out.println("addRegions");
+		System.out.println("Skin addRegions");
+		Gdx.app.error("Skin","addRegions");
 		Array<AtlasRegion> regions = atlas.getRegions();
 		for (int i = 0, n = regions.size; i < n; i++) {
 			AtlasRegion region = regions.get(i);
@@ -129,7 +133,8 @@ public class Skin implements Disposable {
 	}
 
 	public void add (String name, Object resource, Class type) {
-		System.out.println("just add method");
+		System.out.println("Skin just add method");
+		Gdx.app.error("Skin", "Skinjust add method");
 		if (name == null) throw new IllegalArgumentException("name cannot be null.");
 		if (resource == null) throw new IllegalArgumentException("resource cannot be null.");
 		ObjectMap<String, Object> typeResources = resources.get(type);
@@ -460,6 +465,7 @@ public class Skin implements Disposable {
 
 	protected Json getJsonLoader (final FileHandle skinFile) {
 		System.out.println("getJsonLoader");
+		Gdx.app.error("Skin","getJsonLoader");
 		final Skin skin = this;
 
 		final Json json = new Json() {

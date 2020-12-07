@@ -43,6 +43,7 @@ public class GwtFileHandle extends FileHandle {
 	private final FileType type;
 
 	public GwtFileHandle (Preloader preloader, String fileName, FileType type) {
+		Gdx.app.error("GwtFileHandle","Constructur GwtFileHandle, fileName " + fileName +", props: "  + fileName.length() + " " + fileName.toLowerCase() + " and type: " + type.name());
 		if (type != FileType.Internal && type != FileType.Classpath)
 			throw new GdxRuntimeException("FileType '" + type + "' Not supported in GWT backend");
 		this.preloader = preloader;

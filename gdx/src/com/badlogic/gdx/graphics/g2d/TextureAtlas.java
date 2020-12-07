@@ -102,6 +102,7 @@ public class TextureAtlas implements Disposable {
 
 		public TextureAtlasData (FileHandle packFile, FileHandle imagesDir, boolean flip) {
 			System.out.println("TextureAtlasData");
+			Gdx.app.error("TextureAtlas", "Constructor textureatlas");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(packFile.read()), 64);
 			try {
 				Page pageImage = null;
