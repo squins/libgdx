@@ -101,6 +101,7 @@ public class TextureAtlas implements Disposable {
 		final Array<Region> regions = new Array();
 
 		public TextureAtlasData (FileHandle packFile, FileHandle imagesDir, boolean flip) {
+			System.out.println("TextureAtlasData");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(packFile.read()), 64);
 			try {
 				Page pageImage = null;
@@ -242,6 +243,7 @@ public class TextureAtlas implements Disposable {
 
 	/** @param data May be null. */
 	public TextureAtlas (TextureAtlasData data) {
+		System.out.println("TextureAtlas constructor");
 		if (data != null) load(data);
 	}
 

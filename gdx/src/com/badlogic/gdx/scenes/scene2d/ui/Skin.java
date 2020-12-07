@@ -74,8 +74,10 @@ public class Skin implements Disposable {
 	 * extension exists, it is loaded as a {@link TextureAtlas} and the texture regions added to the skin. The atlas is
 	 * automatically disposed when the skin is disposed. */
 	public Skin (FileHandle skinFile) {
+		System.out.println("Skin constructor");
 		FileHandle atlasFile = skinFile.sibling(skinFile.nameWithoutExtension() + ".atlas");
 		if (atlasFile.exists()) {
+			System.out.println("atlas exists");
 			atlas = new TextureAtlas(atlasFile);
 			addRegions(atlas);
 		}
@@ -100,6 +102,7 @@ public class Skin implements Disposable {
 
 	/** Adds all resources in the specified skin JSON file. */
 	public void load (FileHandle skinFile) {
+		System.out.println("Load SkinFile Json");
 		try {
 			getJsonLoader(skinFile).fromJson(Skin.class, skinFile);
 		} catch (SerializationException ex) {
@@ -109,6 +112,7 @@ public class Skin implements Disposable {
 
 	/** Adds all named texture regions from the atlas. The atlas will not be automatically disposed when the skin is disposed. */
 	public void addRegions (TextureAtlas atlas) {
+		System.out.println("addRegions");
 		Array<AtlasRegion> regions = atlas.getRegions();
 		for (int i = 0, n = regions.size; i < n; i++) {
 			AtlasRegion region = regions.get(i);
@@ -125,6 +129,7 @@ public class Skin implements Disposable {
 	}
 
 	public void add (String name, Object resource, Class type) {
+		System.out.println("just add method");
 		if (name == null) throw new IllegalArgumentException("name cannot be null.");
 		if (resource == null) throw new IllegalArgumentException("resource cannot be null.");
 		ObjectMap<String, Object> typeResources = resources.get(type);
@@ -454,6 +459,7 @@ public class Skin implements Disposable {
 	}
 
 	protected Json getJsonLoader (final FileHandle skinFile) {
+		System.out.println("getJsonLoader");
 		final Skin skin = this;
 
 		final Json json = new Json() {
