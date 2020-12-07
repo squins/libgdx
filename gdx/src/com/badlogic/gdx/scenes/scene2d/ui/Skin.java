@@ -56,14 +56,24 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
  * See the <a href="https://github.com/libgdx/libgdx/wiki/Skin">documentation</a> for more.
  * @author Nathan Sweet */
 public class Skin implements Disposable {
+
+	static {
+		System.out.println("Skin instantiating");
+	}
+
 	ObjectMap<Class, ObjectMap<String, Object>> resources = new ObjectMap();
 	TextureAtlas atlas;
 	float scale = 1;
 
 	private final ObjectMap<String, Class> jsonClassTags = new ObjectMap(defaultTagClasses.length);
 	{
-		for (Class c : defaultTagClasses)
+		System.out.println("defaultTagClasses: before loop");
+		for (Class c : defaultTagClasses) {
+			System.out.println("defaultTagClass item");
+			System.out.println("SimpleName: " + c.getSimpleName());
 			jsonClassTags.put(c.getSimpleName(), c);
+		}
+		System.out.println("defaultTagClasses: after loop");
 	}
 
 	/** Creates an empty skin. */
