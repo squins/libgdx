@@ -107,6 +107,7 @@ public class TextureAtlas implements Disposable {
 			try {
 				Page pageImage = null;
 				while (true) {
+					System.out.println("while = true, so go on");
 					String line = reader.readLine();
 					if (line == null) break;
 					if (line.trim().length() == 0)
@@ -188,18 +189,20 @@ public class TextureAtlas implements Disposable {
 						region.offsetY = Integer.parseInt(tuple[1]);
 
 						region.index = Integer.parseInt(readValue(reader));
-
+						System.out.println("flip: " + flip);
 						if (flip) region.flip = true;
-
+						System.out.println("before regions.add");
 						regions.add(region);
+						System.out.println("after regions.add");
 					}
 				}
 			} catch (Exception ex) {
 				throw new GdxRuntimeException("Error reading pack file: " + packFile, ex);
 			} finally {
+				System.out.println("before StreamUtils.closeQuietly(reader);");
 				StreamUtils.closeQuietly(reader);
 			}
-
+			System.out.println("before regions.sort");
 			regions.sort(indexComparator);
 		}
 
@@ -453,6 +456,7 @@ public class TextureAtlas implements Disposable {
 
 	/** Returns the number of tuple values read (1, 2 or 4). */
 	static int readTuple (BufferedReader reader) throws IOException {
+		System.out.println("readTuple");
 		String line = reader.readLine();
 		int colon = line.indexOf(':');
 		if (colon == -1) throw new GdxRuntimeException("Invalid line: " + line);

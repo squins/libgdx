@@ -119,7 +119,9 @@ public final class StreamUtils {
 
 	/** Close and ignore all errors. */
 	public static void closeQuietly (Closeable c) {
+		System.out.println("closeQuietly");
 		if (c != null) {
+			System.out.println("Closeable not null");
 			try {
 				c.close();
 			} catch (Throwable ignored) {
