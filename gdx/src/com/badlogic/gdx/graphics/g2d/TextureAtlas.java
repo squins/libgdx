@@ -16,8 +16,6 @@
 
 package com.badlogic.gdx.graphics.g2d;
 
-import static com.badlogic.gdx.graphics.Texture.TextureWrap.*;
-
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -32,15 +30,15 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.badlogic.gdx.utils.Sort;
 import com.badlogic.gdx.utils.StreamUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+
+import static com.badlogic.gdx.graphics.Texture.TextureWrap.ClampToEdge;
+import static com.badlogic.gdx.graphics.Texture.TextureWrap.Repeat;
 
 /** Loads images from texture atlases created by TexturePacker.<br>
  * <br>
@@ -247,12 +245,14 @@ public class TextureAtlas implements Disposable {
 
 	/** @param data May be null. */
 	public TextureAtlas (TextureAtlasData data) {
-		System.out.println("TextureAtlas constructor");
+		System.out.println("TextureAtlas constructor, data != null: " + data != null);
 		if (data != null) load(data);
 	}
 
 	private void load (TextureAtlasData data) {
+		System.out.println("textureAtlas.load()");
 		ObjectMap<Page, Texture> pageToTexture = new ObjectMap<Page, Texture>();
+		System.out.println("load: first for loop starting");
 		for (Page page : data.pages) {
 			Texture texture = null;
 			if (page.texture == null) {
@@ -267,6 +267,7 @@ public class TextureAtlas implements Disposable {
 			textures.add(texture);
 			pageToTexture.put(page, texture);
 		}
+		System.out.println("load: data.regions for loop starting");
 
 		for (Region region : data.regions) {
 			int width = region.width;
@@ -286,6 +287,8 @@ public class TextureAtlas implements Disposable {
 			if (region.flip) atlasRegion.flip(false, true);
 			regions.add(atlasRegion);
 		}
+		System.out.println("load: completed");
+
 	}
 
 	/** Adds a region to the atlas. The specified texture will be disposed when the atlas is disposed. */

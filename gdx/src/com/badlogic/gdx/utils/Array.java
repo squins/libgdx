@@ -16,13 +16,13 @@
 
 package com.badlogic.gdx.utils;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.reflect.ArrayReflection;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.reflect.ArrayReflection;
 
 /** A resizable, ordered or unordered array of objects. If unordered, this class avoids a memory copy when removing elements (the
  * last element is moved to the removed element's position).
@@ -97,9 +97,12 @@ public class Array<T> implements Iterable<T> {
 	}
 
 	public void add (T value) {
+		System.out.println("Start Array.add");
 		T[] items = this.items;
 		if (size == items.length) items = resize(Math.max(8, (int)(size * 1.75f)));
 		items[size++] = value;
+		System.out.println("Done Array.add");
+
 	}
 
 	public void add (T value1, T value2) {
@@ -405,8 +408,18 @@ public class Array<T> implements Iterable<T> {
 
 	/** Creates a new backing array with the specified size containing the current items. */
 	protected T[] resize (int newSize) {
+		System.out.println("Called array.resize: " + newSize);
 		T[] items = this.items;
-		T[] newItems = (T[])ArrayReflection.newInstance(items.getClass().getComponentType(), newSize);
+
+		System.out.println("Iems.getClass()");
+		final Class<? extends Object[]> aClass = items.getClass();
+		System.out.println("getComponentType(), aClass != null? " + aClass != null);
+		final Class<?> componentType = aClass.getComponentType();
+		System.out.println("ArrayReflection.newInstance");
+		final Object createdObject = ArrayReflection.newInstance(componentType, newSize);
+		System.out.println("Call (T[]) createdObject");
+		T[] newItems = (T[]) createdObject;
+		System.out.println("Call System.arraycopy");
 		System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));
 		this.items = newItems;
 		return newItems;

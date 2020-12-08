@@ -16,13 +16,30 @@
 
 package com.badlogic.gdx.utils.reflect;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 /** Utilities for Array reflection.
  * @author nexsoftware */
 public final class ArrayReflection {
 
 	/** Creates a new array with the specified component type and length. */
 	static public Object newInstance (Class c, int size) {
-		return java.lang.reflect.Array.newInstance(c, size);
+		System.out.println("Called newInstance, size: " + size);
+		System.out.println("newInstance class: " + c);
+
+		if (c.equals(Integer.class)) {
+			return new Integer[size];
+		}
+		if (c.equals(TextureAtlas.TextureAtlasData.Region.class)) {
+			return new TextureAtlas.TextureAtlasData.Region[size];
+		}
+
+		if (c.equals(TextureAtlas.TextureAtlasData.Page.class)) {
+			return new TextureAtlas.TextureAtlasData.Page[size];
+		}
+
+
+		throw new IllegalStateException("Unsupported type: " + c);
 	}
 
 	/** Returns the length of the supplied array. */
