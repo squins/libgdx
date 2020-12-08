@@ -136,22 +136,33 @@ public class Skin implements Disposable {
 			}
 			add(name, region, TextureRegion.class);
 		}
+		Gdx.app.error("Skin","after addRegions");
 	}
 
 	public void add (String name, Object resource) {
-		add(name, resource, resource.getClass());
+		Gdx.app.error("Skin", "First add, getClass()");
+		Class resourceClass = resource.getClass();
+		Gdx.app.error("Skin", "First add, after getClass()");
+		add(name, resource, resourceClass);
+		Gdx.app.error("Skin", "after First add");
 	}
 
 	public void add (String name, Object resource, Class type) {
 		System.out.println("Skin just add method");
-		Gdx.app.error("Skin", "Skinjust add method");
+		Gdx.app.error("Skin", "Skinjust add method, props: " + name + "resource: " + resource + "not null: " + (resource != null) + "type: " + type.getName());
 		if (name == null) throw new IllegalArgumentException("name cannot be null.");
 		if (resource == null) throw new IllegalArgumentException("resource cannot be null.");
+		Gdx.app.error("Skin", "before resources.get(type)");
 		ObjectMap<String, Object> typeResources = resources.get(type);
+		Gdx.app.error("Skin", "after resources.get(type)");
 		if (typeResources == null) {
+			Gdx.app.error("Skin", "typeResources is null");
 			typeResources = new ObjectMap(type == TextureRegion.class || type == Drawable.class || type == Sprite.class ? 256 : 64);
+			Gdx.app.error("Skin", "before resources.put");
 			resources.put(type, typeResources);
+			Gdx.app.error("Skin", "after resources.put");
 		}
+		Gdx.app.error("Skin", "after typeResources == null");
 		typeResources.put(name, resource);
 	}
 

@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
 
@@ -40,7 +41,7 @@ public class Array<T> implements Iterable<T> {
 
 	/** Creates an ordered array with a capacity of 16. */
 	public Array () {
-		this(true, 16);
+		this(true, 1024);
 	}
 
 	/** Creates an ordered array with the specified capacity. */
@@ -67,7 +68,7 @@ public class Array<T> implements Iterable<T> {
 
 	/** Creates an ordered array with {@link #items} of the specified type and a capacity of 16. */
 	public Array (Class arrayType) {
-		this(true, 16, arrayType);
+		this(true, 1024, arrayType);
 	}
 
 	/** Creates a new array containing the elements in the specified array. The new array will have the same type of backing array
@@ -99,7 +100,12 @@ public class Array<T> implements Iterable<T> {
 	public void add (T value) {
 		System.out.println("Start Array.add");
 		T[] items = this.items;
-		if (size == items.length) items = resize(Math.max(8, (int)(size * 1.75f)));
+		if (size == items.length) {
+			System.out.println("resize not supported due to ByteCoder limitations");
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//			items = resize(Math.max(8, (int)(size * 1.75f)));
+		}
 		items[size++] = value;
 		System.out.println("Done Array.add");
 
@@ -107,7 +113,12 @@ public class Array<T> implements Iterable<T> {
 
 	public void add (T value1, T value2) {
 		T[] items = this.items;
-		if (size + 1 >= items.length) items = resize(Math.max(8, (int)(size * 1.75f)));
+		if (size + 1 >= items.length) {
+			System.out.println("resize not supported due to ByteCoder limitations");
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//			items = resize(Math.max(8, (int)(size * 1.75f)));
+		}
 		items[size] = value1;
 		items[size + 1] = value2;
 		size += 2;
@@ -115,7 +126,12 @@ public class Array<T> implements Iterable<T> {
 
 	public void add (T value1, T value2, T value3) {
 		T[] items = this.items;
-		if (size + 2 >= items.length) items = resize(Math.max(8, (int)(size * 1.75f)));
+		if (size + 2 >= items.length){
+			System.out.println("resize not supported due to ByteCoder limitations");
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//			items = resize(Math.max(8, (int)(size * 1.75f)));
+		}
 		items[size] = value1;
 		items[size + 1] = value2;
 		items[size + 2] = value3;
@@ -124,7 +140,12 @@ public class Array<T> implements Iterable<T> {
 
 	public void add (T value1, T value2, T value3, T value4) {
 		T[] items = this.items;
-		if (size + 3 >= items.length) items = resize(Math.max(8, (int)(size * 1.8f))); // 1.75 isn't enough when size=5.
+		if (size + 3 >= items.length){
+			System.out.println("resize not supported due to ByteCoder limitations");
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//			items = resize(Math.max(8, (int)(size * 1.8f))); // 1.75 isn't enough when size=5.
+		}
 		items[size] = value1;
 		items[size + 1] = value2;
 		items[size + 2] = value3;
@@ -149,7 +170,11 @@ public class Array<T> implements Iterable<T> {
 	public void addAll (T[] array, int start, int count) {
 		T[] items = this.items;
 		int sizeNeeded = size + count;
-		if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
+		if (sizeNeeded > items.length){
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations\"");
+//			items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
+		}
 		System.arraycopy(array, start, items, size, count);
 		size += count;
 	}
@@ -167,7 +192,11 @@ public class Array<T> implements Iterable<T> {
 	public void insert (int index, T value) {
 		if (index > size) throw new IndexOutOfBoundsException("index can't be > size: " + index + " > " + size);
 		T[] items = this.items;
-		if (size == items.length) items = resize(Math.max(8, (int)(size * 1.75f)));
+		if (size == items.length) {
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//			items = resize(Math.max(8, (int)(size * 1.75f)));
+		}
 		if (ordered)
 			System.arraycopy(items, index, items, index + 1, size - index);
 		else
@@ -383,7 +412,11 @@ public class Array<T> implements Iterable<T> {
 	 * have been removed, or if it is known that more items will not be added.
 	 * @return {@link #items} */
 	public T[] shrink () {
-		if (items.length != size) resize(size);
+		if (items.length != size) {
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//			resize(size);
+		}
 		return items;
 	}
 
@@ -393,7 +426,11 @@ public class Array<T> implements Iterable<T> {
 	public T[] ensureCapacity (int additionalCapacity) {
 		if (additionalCapacity < 0) throw new IllegalArgumentException("additionalCapacity must be >= 0: " + additionalCapacity);
 		int sizeNeeded = size + additionalCapacity;
-		if (sizeNeeded > items.length) resize(Math.max(8, sizeNeeded));
+		if (sizeNeeded > items.length){
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//			resize(Math.max(8, sizeNeeded));
+		}
 		return items;
 	}
 
@@ -401,7 +438,11 @@ public class Array<T> implements Iterable<T> {
 	 * @return {@link #items} */
 	public T[] setSize (int newSize) {
 		truncate(newSize);
-		if (newSize > items.length) resize(Math.max(8, newSize));
+		if (newSize > items.length){
+			Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+			throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//			resize(Math.max(8, newSize));
+		}
 		size = newSize;
 		return items;
 	}
@@ -409,20 +450,22 @@ public class Array<T> implements Iterable<T> {
 	/** Creates a new backing array with the specified size containing the current items. */
 	protected T[] resize (int newSize) {
 		System.out.println("Called array.resize: " + newSize);
-		T[] items = this.items;
-
-		System.out.println("Iems.getClass()");
-		final Class<? extends Object[]> aClass = items.getClass();
-		System.out.println("getComponentType(), aClass != null? " + aClass != null);
-		final Class<?> componentType = aClass.getComponentType();
-		System.out.println("ArrayReflection.newInstance");
-		final Object createdObject = ArrayReflection.newInstance(componentType, newSize);
-		System.out.println("Call (T[]) createdObject");
-		T[] newItems = (T[]) createdObject;
-		System.out.println("Call System.arraycopy");
-		System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));
-		this.items = newItems;
-		return newItems;
+		Gdx.app.error("Array", "resize not supported due to ByteCoder limitations");
+		throw new IllegalArgumentException("resize not supported due to ByteCoder limitations");
+//		T[] items = this.items;
+//
+//		System.out.println("Iems.getClass()");
+//		final Class<? extends Object[]> aClass = items.getClass();
+//		System.out.println("getComponentType(), aClass != null? " + aClass != null);
+//		final Class<?> componentType = aClass.getComponentType();
+//		System.out.println("ArrayReflection.newInstance");
+//		final Object createdObject = ArrayReflection.newInstance(componentType, newSize);
+//		System.out.println("Call (T[]) createdObject");
+//		T[] newItems = (T[]) createdObject;
+//		System.out.println("Call System.arraycopy");
+//		System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));
+//		this.items = newItems;
+//		return newItems;
 	}
 
 	/** Sorts this array. The array elements must implement {@link Comparable}. This method is not thread safe (uses

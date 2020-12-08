@@ -16,6 +16,8 @@
 
 package com.badlogic.gdx.utils;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -119,33 +121,51 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 	 * Fibonacci numbers, if keys provide poor or incorrect hashcodes, or to simplify hashing if keys provide high quality
 	 * hashcodes and don't need Fibonacci hashing: {@code return item.hashCode() & mask;} */
 	protected int place (K item) {
+		Gdx.app.error("ObjectMap", "place(K item) :" + item.hashCode());
 		return (int)(item.hashCode() * 0x9E3779B97F4A7C15L >>> shift);
 	}
 
 	/** Returns the index of the key if already present, else -(index + 1) for the next empty index. This can be overridden in this
 	 * pacakge to compare for equality differently than {@link Object#equals(Object)}. */
 	int locateKey (K key) {
+		Gdx.app.error("ObjectMap", "LocateKey");
 		if (key == null) throw new IllegalArgumentException("key cannot be null.");
 		K[] keyTable = this.keyTable;
+		Gdx.app.error("ObjectMap", "before for loop");
 		for (int i = place(key);; i = i + 1 & mask) {
+			Gdx.app.error("ObjectMap","inside for loop");
 			K other = keyTable[i];
 			if (other == null) return -(i + 1); // Empty space is available.
-			if (other.equals(key)) return i; // Same key was found.
+			Gdx.app.error("ObjectMap","between for loop");
+			if (other.equals(key)) {
+				Gdx.app.error("ObjectMap", "other.equals = true, return i: " + i);
+				return i; // Same key was found.
+			}
+			Gdx.app.error("ObjectMap","after for loop final");
 		}
 	}
 
 	/** Returns the old value associated with the specified key, or null. */
 	public @Null V put (K key, @Null V value) {
+		Gdx.app.error("ObjectMap","put (K key, @Null V value)");
 		int i = locateKey(key);
+		Gdx.app.error("ObjectMap","after int i = locateKey(key);");
 		if (i >= 0) { // Existing key was found.
+			Gdx.app.error("ObjectMap","Existing key was found.");
 			V oldValue = valueTable[i];
 			valueTable[i] = value;
 			return oldValue;
 		}
+		Gdx.app.error("ObjectMap","after if, Existing key was found.");
 		i = -(i + 1); // Empty space was found.
 		keyTable[i] = key;
 		valueTable[i] = value;
-		if (++size >= threshold) resize(keyTable.length << 1);
+		Gdx.app.error("ObjectMap","after assign keyTable and valueTable");
+		if (++size >= threshold) {
+			Gdx.app.error("ObjectMap","before resize(keyTable.length << 1);");
+			resize(keyTable.length << 1);
+		}
+		Gdx.app.error("ObjectMap","nothing, so return null");
 		return null;
 	}
 
@@ -174,6 +194,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 
 	/** Returns the value for the specified key, or null if the key is not in the map. */
 	public @Null <T extends K> V get (T key) {
+		Gdx.app.error("ObjectMap", "get(T key)");
 		int i = locateKey(key);
 		return i < 0 ? null : valueTable[i];
 	}
@@ -295,6 +316,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 	}
 
 	final void resize (int newSize) {
+		Gdx.app.error("ObjectMap","resize (int newSize) called");
 		int oldCapacity = keyTable.length;
 		threshold = (int)(newSize * loadFactor);
 		mask = newSize - 1;
@@ -302,6 +324,8 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 
 		K[] oldKeyTable = keyTable;
 		V[] oldValueTable = valueTable;
+
+		Gdx.app.error("ObjectMap","before instance keyTable and valueTable");
 
 		keyTable = (K[])new Object[newSize];
 		valueTable = (V[])new Object[newSize];
@@ -312,6 +336,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 				if (key != null) putResize(key, oldValueTable[i]);
 			}
 		}
+		Gdx.app.error("ObjectMap","after resize (int newSize) called");
 	}
 
 	public int hashCode () {
