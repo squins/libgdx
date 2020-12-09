@@ -137,6 +137,16 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 			K other = keyTable[i];
 			if (other == null) return -(i + 1); // Empty space is available.
 			Gdx.app.error("ObjectMap","between for loop");
+			Gdx.app.error("ObjectMap", "other == null: " + (other == null));
+			if (other instanceof  Class) {
+				Gdx.app.error("ObjectMap", "other is class");
+			}
+			if (key instanceof  Class) {
+				Gdx.app.error("ObjectMap", "key is class");
+			}
+			Gdx.app.error("ObjectMap", "other.type: " + (other.getClass().getName()));
+			Gdx.app.error("ObjectMap", "key == null: "+ (key == null));
+			Gdx.app.error("ObjectMap", "key.type: "+ (key.getClass().getName()));
 			if (other.equals(key)) {
 				Gdx.app.error("ObjectMap", "other.equals = true, return i: " + i);
 				return i; // Same key was found.
