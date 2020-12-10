@@ -128,21 +128,28 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 	/** Returns the index of the key if already present, else -(index + 1) for the next empty index. This can be overridden in this
 	 * pacakge to compare for equality differently than {@link Object#equals(Object)}. */
 	int locateKey (K key) {
+
 		Gdx.app.error("ObjectMap", "LocateKey");
 		if (key == null) throw new IllegalArgumentException("key cannot be null.");
 		K[] keyTable = this.keyTable;
 		Gdx.app.error("ObjectMap", "before for loop");
 		for (int i = place(key);; i = i + 1 & mask) {
 			Gdx.app.error("ObjectMap","inside for loop");
-			K other = keyTable[i];
+			Object other = keyTable[i];
+			Gdx.app.error("Objectmap", "index is: " + i);
 			if (other == null) return -(i + 1); // Empty space is available.
 			Gdx.app.error("ObjectMap","between for loop");
 			Gdx.app.error("ObjectMap", "other == null: " + (other == null));
-			if (other instanceof  Class) {
-				Gdx.app.error("ObjectMap", "other is class");
-			}
-			if (key instanceof  Class) {
-				Gdx.app.error("ObjectMap", "key is class");
+//			if (other instanceof  Class) {
+//				Gdx.app.error("ObjectMap", "other is class");
+//			}
+//			if (key instanceof  Class) {
+//				Gdx.app.error("ObjectMap", "key is class");
+//			}
+			if(other.getClass() == null){
+				Gdx.app.error("ObjectMap", "so getClass = null = true");
+				Gdx.app.error("ObjectMap", "hoe kan dat nou?");
+				continue;
 			}
 			Gdx.app.error("ObjectMap", "other.type: " + (other.getClass().getName()));
 			Gdx.app.error("ObjectMap", "key == null: "+ (key == null));
