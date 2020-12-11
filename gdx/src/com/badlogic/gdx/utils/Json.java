@@ -65,7 +65,9 @@ public class Json {
 	private final Object[] equals1 = {null}, equals2 = {null};
 
 	public Json () {
+		System.out.println("Json() constructor");
 		outputType = OutputType.minimal;
+		System.out.println("after set outputType");
 	}
 
 	public Json (OutputType outputType) {
@@ -75,10 +77,12 @@ public class Json {
 	/** When true, fields in the JSON that are not found on the class will not throw a {@link SerializationException}. Default is
 	 * false. */
 	public void setIgnoreUnknownFields (boolean ignoreUnknownFields) {
+		System.out.println("setIgnoreUnknownFields");
 		this.ignoreUnknownFields = ignoreUnknownFields;
 	}
 
 	public boolean getIgnoreUnknownFields () {
+		System.out.println("getIgnoreUnknownFields");
 		return ignoreUnknownFields;
 	}
 
@@ -86,6 +90,7 @@ public class Json {
 	 * @see #setReadDeprecated(boolean)
 	 * @see #setDeprecated(Class, String, boolean) */
 	public void setIgnoreDeprecated (boolean ignoreDeprecated) {
+		System.out.println("setIgnoreDeprecated");
 		this.ignoreDeprecated = ignoreDeprecated;
 	}
 
@@ -93,12 +98,14 @@ public class Json {
 	 * {@link #setIgnoreDeprecated(boolean)} is true. Default is false.
 	 * @see #setDeprecated(Class, String, boolean) */
 	public void setReadDeprecated (boolean readDeprecated) {
+		System.out.println("setReadDeprecated");
 		this.readDeprecated = readDeprecated;
 	}
 
 	/** Default is {@link OutputType#minimal}.
 	 * @see JsonWriter#setOutputType(OutputType) */
 	public void setOutputType (OutputType outputType) {
+		System.out.println("setOutputType");
 		this.outputType = outputType;
 	}
 
@@ -122,6 +129,7 @@ public class Json {
 
 	/** Returns the class for the specified tag, or null. */
 	public Class getClass (String tag) {
+		System.out.println("getClass, tag: " + tag);
 		return tagToClass.get(tag);
 	}
 
@@ -134,6 +142,7 @@ public class Json {
 	 * deserialization. Set to null to never output this information, but be warned that deserialization may fail. Default is
 	 * "class". */
 	public void setTypeName (String typeName) {
+		System.out.println("setTypeName, typeName: " + typeName);
 		this.typeName = typeName;
 	}
 
@@ -146,6 +155,7 @@ public class Json {
 	/** Registers a serializer to use for the specified type instead of the default behavior of serializing all of an objects
 	 * fields. */
 	public <T> void setSerializer (Class<T> type, Serializer<T> serializer) {
+		System.out.println("setSerializer");
 		classToSerializer.put(type, serializer);
 	}
 
@@ -155,6 +165,7 @@ public class Json {
 
 	/** When true, field values that are identical to a newly constructed instance are not written. Default is true. */
 	public void setUsePrototypes (boolean usePrototypes) {
+		System.out.println("setUsePrototypes, usePrototypes: " + usePrototypes);
 		this.usePrototypes = usePrototypes;
 	}
 
@@ -766,6 +777,7 @@ public class Json {
 	/** @param type May be null if the type is unknown.
 	 * @return May be null. */
 	public <T> T fromJson (Class<T> type, Reader reader) {
+		System.out.println("fromJson");
 		return readValue(type, null, new JsonReader().parse(reader));
 	}
 
@@ -792,6 +804,7 @@ public class Json {
 	/** @param type May be null if the type is unknown.
 	 * @return May be null. */
 	public <T> T fromJson (Class<T> type, FileHandle file) {
+		System.out.println("fromJson (Class<T> type, FileHandle file), file: " + file.name());
 		try {
 			return readValue(type, null, new JsonReader().parse(file));
 		} catch (Exception ex) {
@@ -971,9 +984,11 @@ public class Json {
 	 * @param elementType May be null if the type is unknown.
 	 * @return May be null. */
 	public <T> T readValue (Class<T> type, Class elementType, JsonValue jsonData) {
+		System.out.println("readValue, type: " + elementType.getName() + "jsonValue: " + jsonData.name);
 		if (jsonData == null) return null;
 
 		if (jsonData.isObject()) {
+			System.out.println("isObject = true");
 			String className = typeName == null ? null : jsonData.getString(typeName, null);
 			if (className != null) {
 				type = getClass(className);

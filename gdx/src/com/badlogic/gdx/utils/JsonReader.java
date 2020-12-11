@@ -35,6 +35,7 @@ import com.badlogic.gdx.utils.JsonValue.ValueType;
  * @author Nathan Sweet */
 public class JsonReader implements BaseJsonReader {
 	public JsonValue parse (String json) {
+		System.out.println(" JsonValue parse, string: " + json);
 		char[] data = json.toCharArray();
 		return parse(data, 0, data.length);
 	}

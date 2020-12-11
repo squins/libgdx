@@ -134,12 +134,12 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 		K[] keyTable = this.keyTable;
 		Gdx.app.error("ObjectMap", "before for loop");
 		for (int i = place(key);; i = i + 1 & mask) {
-			Gdx.app.error("ObjectMap","inside for loop");
+//			Gdx.app.error("ObjectMap","inside for loop");
 			Object other = keyTable[i];
 			Gdx.app.error("Objectmap", "index is: " + i);
 			if (other == null) return -(i + 1); // Empty space is available.
-			Gdx.app.error("ObjectMap","between for loop");
-			Gdx.app.error("ObjectMap", "other == null: " + (other == null));
+//			Gdx.app.error("ObjectMap","between for loop");
+//			Gdx.app.error("ObjectMap", "other == null: " + (other == null));
 //			if (other instanceof  Class) {
 //				Gdx.app.error("ObjectMap", "other is class");
 //			}
@@ -147,13 +147,13 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 //				Gdx.app.error("ObjectMap", "key is class");
 //			}
 			if(other.getClass() == null){
-				Gdx.app.error("ObjectMap", "so getClass = null = true");
+//				Gdx.app.error("ObjectMap", "so getClass = null = true");
 				Gdx.app.error("ObjectMap", "hoe kan dat nou?");
 				continue;
 			}
 			Gdx.app.error("ObjectMap", "other.type: " + (other.getClass().getName()));
-			Gdx.app.error("ObjectMap", "key == null: "+ (key == null));
-			Gdx.app.error("ObjectMap", "key.type: "+ (key.getClass().getName()));
+//			Gdx.app.error("ObjectMap", "key == null: "+ (key == null));
+//			Gdx.app.error("ObjectMap", "key.type: "+ (key.getClass().getName()));
 			if (other.equals(key)) {
 				Gdx.app.error("ObjectMap", "other.equals = true, return i: " + i);
 				return i; // Same key was found.
@@ -164,7 +164,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 
 	/** Returns the old value associated with the specified key, or null. */
 	public @Null V put (K key, @Null V value) {
-		Gdx.app.error("ObjectMap","put (K key, @Null V value)");
+//		Gdx.app.error("ObjectMap","put (K key, @Null V value)");
 		int i = locateKey(key);
 		Gdx.app.error("ObjectMap","after int i = locateKey(key);");
 		if (i >= 0) { // Existing key was found.
@@ -211,7 +211,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 
 	/** Returns the value for the specified key, or null if the key is not in the map. */
 	public @Null <T extends K> V get (T key) {
-		Gdx.app.error("ObjectMap", "get(T key)");
+//		Gdx.app.error("ObjectMap", "get(T key)");
 		int i = locateKey(key);
 		return i < 0 ? null : valueTable[i];
 	}

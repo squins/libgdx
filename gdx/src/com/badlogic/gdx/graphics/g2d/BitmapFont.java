@@ -149,6 +149,7 @@ public class BitmapFont implements Disposable {
 	 * of the region(s) if the regions array is != null and not empty.
 	 * @param integer If true, rendering positions will be at integer values to avoid filtering artifacts. */
 	public BitmapFont (BitmapFontData data, Array<TextureRegion> pageRegions, boolean integer) {
+		System.out.println("BitmapFont constructor");
 		this.flipped = data.flipped;
 		this.data = data;
 		this.integer = integer;
@@ -162,8 +163,10 @@ public class BitmapFont implements Disposable {
 			regions = new Array(n);
 			for (int i = 0; i < n; i++) {
 				FileHandle file;
-				if (data.fontFile == null)
+				if (data.fontFile == null) {
+					System.out.println("fontFile == null");
 					file = Gdx.files.internal(data.imagePaths[i]);
+				}
 				else
 					file = Gdx.files.getFileHandle(data.imagePaths[i], data.fontFile.type());
 				regions.add(new TextureRegion(new Texture(file, false)));
@@ -176,10 +179,12 @@ public class BitmapFont implements Disposable {
 
 		cache = newFontCache();
 
+		System.out.println("before load(data), data is: " + data.name);
 		load(data);
 	}
 
 	protected void load (BitmapFontData data) {
+		System.out.println("Load bitmapfont data");
 		for (Glyph[] page : data.glyphs) {
 			if (page == null) continue;
 			for (Glyph glyph : page)
@@ -486,16 +491,21 @@ public class BitmapFont implements Disposable {
 		}
 
 		public void load (FileHandle fontFile, boolean flip) {
+			System.out.println("load BitMapFont");
 			if (imagePaths != null) throw new IllegalStateException("Already loaded.");
 
 			name = fontFile.nameWithoutExtension();
 
+			System.out.println("name: " + name);
+
 			BufferedReader reader = new BufferedReader(new InputStreamReader(fontFile.read()), 512);
 			try {
+				System.out.println("reader works, now in try, go on");
 				String line = reader.readLine(); // info
 				if (line == null) throw new GdxRuntimeException("File is empty.");
 
 				line = line.substring(line.indexOf("padding=") + 8);
+				System.out.println("line is: "  + line);
 				String[] padding = line.substring(0, line.indexOf(' ')).split(",", 4);
 				if (padding.length != 4) throw new GdxRuntimeException("Invalid padding.");
 				padTop = Integer.parseInt(padding[0]);
@@ -525,6 +535,8 @@ public class BitmapFont implements Disposable {
 					}
 				}
 
+				System.out.println("before imagePaths");
+
 				imagePaths = new String[pageCount];
 
 				// Read each page definition.
@@ -533,21 +545,30 @@ public class BitmapFont implements Disposable {
 					line = reader.readLine();
 					if (line == null) throw new GdxRuntimeException("Missing additional page definitions.");
 
+					System.out.println("before matcher");
 					// Expect ID to mean "index".
 					Matcher matcher = Pattern.compile(".*id=(\\d+)").matcher(line);
 					if (matcher.find()) {
+						System.out.println("matcher find true");
 						String id = matcher.group(1);
+						System.out.println(id);
 						try {
+							System.out.println("before parseInt(id)");
 							int pageID = Integer.parseInt(id);
+							System.out.println("after parseInt(id)");
 							if (pageID != p) throw new GdxRuntimeException("Page IDs must be indices starting at 0: " + id);
 						} catch (NumberFormatException ex) {
 							throw new GdxRuntimeException("Invalid page id: " + id, ex);
 						}
 					}
 
+					System.out.println("between matcher");
+
 					matcher = Pattern.compile(".*file=\"?([^\"]+)\"?").matcher(line);
 					if (!matcher.find()) throw new GdxRuntimeException("Missing: file");
 					String fileName = matcher.group(1);
+
+					System.out.println("filename:"  + fileName);
 
 					imagePaths[p] = fontFile.parent().child(fileName).path().replaceAll("\\\\", "/");
 				}
@@ -560,7 +581,9 @@ public class BitmapFont implements Disposable {
 					if (line.startsWith("metrics ")) break; // Starting metrics block.
 					if (!line.startsWith("char ")) continue;
 
+					System.out.println("before new Glyph()");
 					Glyph glyph = new Glyph();
+					System.out.println("after new Glyph()");
 
 					StringTokenizer tokens = new StringTokenizer(line, " =");
 					tokens.nextToken();
@@ -602,6 +625,7 @@ public class BitmapFont implements Disposable {
 
 					if (glyph.width > 0 && glyph.height > 0) descent = Math.min(baseLine + glyph.yoffset, descent);
 				}
+				System.out.println("after while loop");
 				descent += padBottom;
 
 				while (true) {
@@ -635,7 +659,7 @@ public class BitmapFont implements Disposable {
 
 				// Metrics override
 				if (line != null && line.startsWith("metrics ")) {
-
+					System.out.println("Metrics override");
 					hasMetricsOverride = true;
 
 					StringTokenizer tokens = new StringTokenizer(line, " =");
@@ -655,7 +679,7 @@ public class BitmapFont implements Disposable {
 					tokens.nextToken();
 					overrideXHeight = Float.parseFloat(tokens.nextToken());
 				}
-
+				System.out.println("before Glyph stuff");
 				Glyph spaceGlyph = getGlyph(' ');
 				if (spaceGlyph == null) {
 					spaceGlyph = new Glyph();
@@ -702,7 +726,7 @@ public class BitmapFont implements Disposable {
 					ascent = -ascent;
 					down = -down;
 				}
-
+				System.out.println("before hasMetricsOverride");
 				if (hasMetricsOverride) {
 					this.ascent = overrideAscent;
 					this.descent = overrideDescent;
@@ -712,7 +736,7 @@ public class BitmapFont implements Disposable {
 					this.spaceXadvance = overrideSpaceXAdvance;
 					this.xHeight = overrideXHeight;
 				}
-
+				System.out.println("try catch and finally closeQuietly(reader)");
 			} catch (Exception ex) {
 				throw new GdxRuntimeException("Error loading font file: " + fontFile, ex);
 			} finally {
@@ -721,6 +745,7 @@ public class BitmapFont implements Disposable {
 		}
 
 		public void setGlyphRegion (Glyph glyph, TextureRegion region) {
+			System.out.println("setGlyphRegion");
 			Texture texture = region.getTexture();
 			float invTexWidth = 1.0f / texture.getWidth();
 			float invTexHeight = 1.0f / texture.getHeight();
