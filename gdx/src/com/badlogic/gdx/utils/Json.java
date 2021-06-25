@@ -67,7 +67,6 @@ public class Json {
 	public Json () {
 		System.out.println("Json() constructor");
 		outputType = OutputType.minimal;
-		System.out.println("after set outputType");
 	}
 
 	public Json (OutputType outputType) {
@@ -892,8 +891,11 @@ public class Json {
 	}
 
 	public void readFields (Object object, JsonValue jsonMap) {
+		System.out.println("readFiels, obj: " + object);
 		Class type = object.getClass();
+		System.out.println("before OrderedMap");
 		OrderedMap<String, FieldMetadata> fields = getFields(type);
+		System.out.println("before for loop");
 		for (JsonValue child = jsonMap.child; child != null; child = child.next) {
 			FieldMetadata metadata = fields.get(child.name().replace(" ", "_"));
 			if (metadata == null) {
@@ -910,6 +912,7 @@ public class Json {
 			} else {
 				if (ignoreDeprecated && !readDeprecated && metadata.deprecated) continue;
 			}
+			System.out.println("between for loop");
 			Field field = metadata.field;
 			try {
 				field.set(object, readValue(field.getType(), metadata.elementType, child));
@@ -925,6 +928,7 @@ public class Json {
 				throw ex;
 			}
 		}
+		System.out.println("after readFields()");
 	}
 
 	/** Called for each unknown field name encountered by {@link #readFields(Object, JsonValue)} when {@link #ignoreUnknownFields}
@@ -984,7 +988,7 @@ public class Json {
 	 * @param elementType May be null if the type is unknown.
 	 * @return May be null. */
 	public <T> T readValue (Class<T> type, Class elementType, JsonValue jsonData) {
-		System.out.println("readValue, type: " + elementType.getName() + "jsonValue: " + jsonData.name);
+		System.out.println("readValue, type: " + elementType + " jsonValue: " + jsonData.name);
 		if (jsonData == null) return null;
 
 		if (jsonData.isObject()) {

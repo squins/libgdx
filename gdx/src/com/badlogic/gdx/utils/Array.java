@@ -98,7 +98,6 @@ public class Array<T> implements Iterable<T> {
 	}
 
 	public void add (T value) {
-		System.out.println("Start Array.add");
 		T[] items = this.items;
 		if (size == items.length) {
 			System.out.println("resize not supported due to ByteCoder limitations");
@@ -659,6 +658,11 @@ public class Array<T> implements Iterable<T> {
 	/** @see #Array(Object[]) */
 	static public <T> Array<T> with (T... array) {
 		return new Array(array);
+	}
+
+	/** @see #Array(Object[]) */
+	static public <T> Array<T> with (T element) {
+		return new Array(true, 1, element.getClass());
 	}
 
 	static public class ArrayIterator<T> implements Iterator<T>, Iterable<T> {

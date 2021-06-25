@@ -127,6 +127,7 @@ public final class StreamUtils {
 			} catch (Throwable ignored) {
 			}
 		}
+		System.out.println("After closeQuietly");
 	}
 
 	/** A ByteArrayOutputStream which avoids copying of the byte array if possible. */

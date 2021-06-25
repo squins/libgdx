@@ -121,15 +121,20 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 	 * Fibonacci numbers, if keys provide poor or incorrect hashcodes, or to simplify hashing if keys provide high quality
 	 * hashcodes and don't need Fibonacci hashing: {@code return item.hashCode() & mask;} */
 	protected int place (K item) {
-		Gdx.app.error("ObjectMap", "place(K item) :" + item.hashCode());
+		if(item instanceof String){
+			System.out.println("itsss a String");
+		}
+		System.out.println("place(K item!!)");
+		System.out.println("item == null? :" + (item == null));
+//		System.out.println("place: " + item);
+//		Gdx.app.error("ObjectMap", "place(K item) :" + item.hashCode());
 		return (int)(item.hashCode() * 0x9E3779B97F4A7C15L >>> shift);
 	}
 
 	/** Returns the index of the key if already present, else -(index + 1) for the next empty index. This can be overridden in this
 	 * pacakge to compare for equality differently than {@link Object#equals(Object)}. */
 	int locateKey (K key) {
-
-		Gdx.app.error("ObjectMap", "LocateKey");
+		Gdx.app.error("ObjectMap", "LocateKey, key: " + (key ==null));
 		if (key == null) throw new IllegalArgumentException("key cannot be null.");
 		K[] keyTable = this.keyTable;
 		Gdx.app.error("ObjectMap", "before for loop");
@@ -164,7 +169,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 
 	/** Returns the old value associated with the specified key, or null. */
 	public @Null V put (K key, @Null V value) {
-//		Gdx.app.error("ObjectMap","put (K key, @Null V value)");
+		Gdx.app.error("ObjectMap","put (K key, @Null V value)");
 		int i = locateKey(key);
 		Gdx.app.error("ObjectMap","after int i = locateKey(key);");
 		if (i >= 0) { // Existing key was found.

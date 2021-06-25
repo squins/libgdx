@@ -491,7 +491,7 @@ public class BitmapFont implements Disposable {
 		}
 
 		public void load (FileHandle fontFile, boolean flip) {
-			System.out.println("load BitMapFont");
+			System.out.println("load BitMapFont, fontfile: " + fontFile.path() + " flip: " + flip);
 			if (imagePaths != null) throw new IllegalStateException("Already loaded.");
 
 			name = fontFile.nameWithoutExtension();
@@ -545,12 +545,17 @@ public class BitmapFont implements Disposable {
 					line = reader.readLine();
 					if (line == null) throw new GdxRuntimeException("Missing additional page definitions.");
 
-					System.out.println("before matcher");
+					System.out.println("before matcher, line: " + line);
 					// Expect ID to mean "index".
 					Matcher matcher = Pattern.compile(".*id=(\\d+)").matcher(line);
 					if (matcher.find()) {
 						System.out.println("matcher find true");
-						String id = matcher.group(1);
+						System.out.println("matcher count: " + matcher.groupCount());
+						System.out.println("matcher string: " + matcher.toString());
+						System.out.println("matcher: " + matcher.pattern());
+						System.out.println("matcher end : " + matcher.end());
+//						String id = matcher.group(1);
+						String id = "0";
 						System.out.println(id);
 						try {
 							System.out.println("before parseInt(id)");
@@ -565,16 +570,31 @@ public class BitmapFont implements Disposable {
 					System.out.println("between matcher");
 
 					matcher = Pattern.compile(".*file=\"?([^\"]+)\"?").matcher(line);
-					if (!matcher.find()) throw new GdxRuntimeException("Missing: file");
-					String fileName = matcher.group(1);
+					System.out.println(matcher);
+//					if (!matcher.find()) {
+//						System.out.println("no file found, with line: " + line);
+//						throw new GdxRuntimeException("Missing: file");
+//					}
+//					String fileName = matcher.group(1);
+					String fileName = "default.png";
 
 					System.out.println("filename:"  + fileName);
 
-					imagePaths[p] = fontFile.parent().child(fileName).path().replaceAll("\\\\", "/");
+					FileHandle fileHandle = fontFile.parent();
+					System.out.println("after parent()");
+					FileHandle fileHandle1 = fileHandle.child(fileName);
+					System.out.println("after child()");
+					String file = fileHandle1.path();
+					System.out.println("after file: " + file);
+//					String replaceFile = file.replaceAll("\\\\", "/");
+//					imagePaths[p] = fontFile.parent().child(fileName).path().replaceAll("\\\\", "/");
+ 					imagePaths[p] = file;
+					System.out.println("After file assign");
 				}
 				descent = 0;
-
+				System.out.println("before while loop");
 				while (true) {
+					System.out.println("while true, go on");
 					line = reader.readLine();
 					if (line == null) break; // EOF
 					if (line.startsWith("kernings ")) break; // Starting kernings block.
@@ -742,6 +762,7 @@ public class BitmapFont implements Disposable {
 			} finally {
 				StreamUtils.closeQuietly(reader);
 			}
+			System.out.println("after bitmapFont Load()");
 		}
 
 		public void setGlyphRegion (Glyph glyph, TextureRegion region) {

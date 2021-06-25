@@ -148,8 +148,8 @@ public class Skin implements Disposable {
 	}
 
 	public void add (String name, Object resource, Class type) {
-		System.out.println("Skin just add method");
-//		Gdx.app.error("Skin", "Skinjust add method, props: " + name + "resource: " + resource + "not null: " + (resource != null) + "type: " + type.getName());
+		System.out.println("Skin just add method, name " + name);
+		Gdx.app.error("Skin", "Skin just add method, props: " + name + "not null: " + (resource != null) + "type: " + type.getName());
 		if (name == null) throw new IllegalArgumentException("name cannot be null.");
 		if (resource == null) throw new IllegalArgumentException("resource cannot be null.");
 		Gdx.app.error("Skin", "before resources.get(type)");

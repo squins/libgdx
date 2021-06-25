@@ -459,7 +459,6 @@ public class TextureAtlas implements Disposable {
 
 	/** Returns the number of tuple values read (1, 2 or 4). */
 	static int readTuple (BufferedReader reader) throws IOException {
-		System.out.println("readTuple");
 		String line = reader.readLine();
 		int colon = line.indexOf(':');
 		if (colon == -1) throw new GdxRuntimeException("Invalid line: " + line);

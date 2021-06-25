@@ -273,7 +273,7 @@ public abstract class GLTexture implements Disposable {
 	}
 	
 	public static void uploadImageData (int target, TextureData data, int miplevel) {
-		// DISABLED: performance System.out.println("GLTexture uploadImageData called");
+		System.out.println("GLTexture uploadImageData called");
 		if (data == null) {
 			// FIXME: remove texture on target?
 			return;
