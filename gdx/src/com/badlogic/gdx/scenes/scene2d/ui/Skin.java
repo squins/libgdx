@@ -602,9 +602,13 @@ public class Skin implements Disposable {
 		json.setSerializer(Color.class, new ReadOnlySerializer<Color>() {
 			public Color read (Json json, JsonValue jsonData, Class type) {
 				if (jsonData.isString()) return get(jsonData.asString(), Color.class);
+				System.out.println("Reading hex");
 				String hex = json.readValue("hex", String.class, (String)null, jsonData);
+				System.out.println("Is hex null? " + (hex == null));
 				if (hex != null) return Color.valueOf(hex);
+				System.out.println("Reading RGBA values");
 				float r = json.readValue("r", float.class, 0f, jsonData);
+				System.out.println("Read R value");
 				float g = json.readValue("g", float.class, 0f, jsonData);
 				float b = json.readValue("b", float.class, 0f, jsonData);
 				float a = json.readValue("a", float.class, 1f, jsonData);

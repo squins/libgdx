@@ -950,8 +950,11 @@ public class Json {
 	/** @param type May be null if the type is unknown.
 	 * @return May be null. */
 	public <T> T readValue (String name, Class<T> type, T defaultValue, JsonValue jsonMap) {
+		System.out.println("json.readValue: " + name);
 		JsonValue jsonValue = jsonMap.get(name);
+		System.out.println("jsonValue: " + jsonValue);
 		if (jsonValue == null) return defaultValue;
+		System.out.println("delegating to different Read value");
 		return readValue(type, null, jsonValue);
 	}
 
@@ -988,9 +991,12 @@ public class Json {
 	 * @param elementType May be null if the type is unknown.
 	 * @return May be null. */
 	public <T> T readValue (Class<T> type, Class elementType, JsonValue jsonData) {
-		System.out.println("readValue, type: " + elementType + " jsonValue: " + jsonData.name);
+		System.out.println("readValue (Class<T> type, Class elementType, JsonValue jsonData)");
+		System.out.println("JsonData null? "  + (jsonData == null));
+//		System.out.println("readValue, type: " + elementType + " jsonValue: " + jsonData.name);
 		if (jsonData == null) return null;
 
+		System.out.println("jsonData.isObject()? " + jsonData.isObject());
 		if (jsonData.isObject()) {
 			System.out.println("isObject = true");
 			String className = typeName == null ? null : jsonData.getString(typeName, null);
