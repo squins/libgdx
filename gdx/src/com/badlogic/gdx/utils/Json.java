@@ -872,6 +872,8 @@ public class Json {
 	/** @param object May be null if the field is static.
 	 * @param elementType May be null if the type is unknown. */
 	public void readField (Object object, Field field, String jsonName, Class elementType, JsonValue jsonMap) {
+		System.out.println("JSON: readField: " + jsonName);
+
 		JsonValue jsonValue = jsonMap.get(jsonName);
 		if (jsonValue == null) return;
 		try {
@@ -996,6 +998,13 @@ public class Json {
 //		System.out.println("readValue, type: " + elementType + " jsonValue: " + jsonData.name);
 		if (jsonData == null) return null;
 
+		if (type != null) {
+			System.out.println("Type:" + type);
+		}
+
+		if (elementType != null) {
+			System.out.println("elementType:" + elementType);
+		}
 		System.out.println("jsonData.isObject()? " + jsonData.isObject());
 		if (jsonData.isObject()) {
 			System.out.println("isObject = true");

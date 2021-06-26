@@ -16,14 +16,11 @@
 
 package com.badlogic.gdx.utils;
 
+import com.badlogic.gdx.files.FileHandle;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 /** Lightweight UBJSON parser.<br>
  * <br>
@@ -157,6 +154,10 @@ public class UBJsonReader implements BaseJsonReader {
 		while (din.available() > 0 && type != '}') {
 			final String key = parseString(din, true, type);
 			final JsonValue child = parse(din, valueType == 0 ? din.readByte() : valueType);
+
+			if ("r".equals(key)) {
+
+			}
 			child.setName(key);
 			child.parent = result;
 			if (prev != null) {

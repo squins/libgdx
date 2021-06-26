@@ -106,8 +106,6 @@ public class Array<T> implements Iterable<T> {
 //			items = resize(Math.max(8, (int)(size * 1.75f)));
 		}
 		items[size++] = value;
-		System.out.println("Done Array.add");
-
 	}
 
 	public void add (T value1, T value2) {

@@ -20,13 +20,13 @@
 
 package com.badlogic.gdx.utils;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.JsonValue.ValueType;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.JsonValue.ValueType;
 
 /** Lightweight JSON parser.<br>
  * <br>
@@ -90,7 +90,7 @@ public class JsonReader implements BaseJsonReader {
 		RuntimeException parseRuntimeEx = null;
 
 		boolean debug = false;
-		if (debug) System.out.println();
+		if (debug) System.out.println("DEBUG JSONREADER");
 
 		try {
 
@@ -196,6 +196,9 @@ public class JsonReader implements BaseJsonReader {
 										names.add(value);
 									} else {
 										String name = names.size > 0 ? names.pop() : null;
+										if ("r".equals(name)) {
+											System.out.println("JsonReader parsed name 'r'");
+										}
 										if (stringIsUnquoted) {
 											if (value.equals("true")) {
 												if (debug) System.out.println("boolean: " + name + "=true");
@@ -660,6 +663,9 @@ public class JsonReader implements BaseJsonReader {
 
 	/** @param name May be null. */
 	private void addChild (@Null String name, JsonValue child) {
+		if ("r".equals(name)) {
+			System.out.println("JsonReader name==r!");
+		}
 		child.setName(name);
 		if (current == null) {
 			current = child;

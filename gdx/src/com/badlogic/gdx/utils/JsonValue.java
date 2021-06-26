@@ -16,12 +16,12 @@
 
 package com.badlogic.gdx.utils;
 
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 /** Container for a JSON object, array, string, double, long, boolean, or null.
  * <p>
@@ -53,6 +53,11 @@ public class JsonValue implements Iterable<JsonValue> {
 
 	public JsonValue (ValueType type) {
 		this.type = type;
+		debug("Constructor, type: " + type);
+	}
+
+	private void debug(String string) {
+		System.out.println("[JsonValue]: " + string);
 	}
 
 	/** @param value May be null. */
@@ -863,6 +868,10 @@ public class JsonValue implements Iterable<JsonValue> {
 
 	/** @param name May be null. */
 	public void setName (String name) {
+		debug("Value.settName: " + name);
+		if ("r".equals(name)) {
+			debug("setName to r");
+		}
 		this.name = name;
 	}
 
@@ -881,6 +890,7 @@ public class JsonValue implements Iterable<JsonValue> {
 	/** Sets the name of the specified value and adds it after the last child. */
 	public void addChild (String name, JsonValue value) {
 		if (name == null) throw new IllegalArgumentException("name cannot be null.");
+		debug("Value.addChild(name: " + name + ", type:" + value.type);
 		value.name = name;
 		addChild(value);
 	}
