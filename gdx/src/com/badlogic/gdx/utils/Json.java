@@ -805,7 +805,9 @@ public class Json {
 	public <T> T fromJson (Class<T> type, FileHandle file) {
 		System.out.println("fromJson (Class<T> type, FileHandle file), file: " + file.name());
 		try {
-			return readValue(type, null, new JsonReader().parse(file));
+			T returnVal = readValue(type, null, new JsonReader().parse(file));
+			System.out.println("Return fromJson with returnVal");
+			return returnVal;
 		} catch (Exception ex) {
 			throw new SerializationException("Error reading file: " + file, ex);
 		}
@@ -994,7 +996,9 @@ public class Json {
 	 * @return May be null. */
 	public <T> T readValue (Class<T> type, Class elementType, JsonValue jsonData) {
 		System.out.println("readValue (Class<T> type, Class elementType, JsonValue jsonData)");
-		System.out.println("JsonData null? "  + (jsonData == null));
+		System.out.println("type is null? "  + (type == null));
+		System.out.println("elementType is null? "  + (elementType == null));
+		System.out.println("JsonData is null? "  + (jsonData == null));
 //		System.out.println("readValue, type: " + elementType + " jsonValue: " + jsonData.name);
 		if (jsonData == null) return null;
 
